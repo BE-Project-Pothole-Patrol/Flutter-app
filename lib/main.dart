@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'theme/theme_constants.dart';
 import 'theme/theme_manager.dart';
-import 'screens/splash_screen.dart';
+import 'screens/onboarding_screen1.dart';
+import 'screens/onboarding_screen2.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: _themeManager.themeMode,
-      home: const SplashScreen(),
+      home: const OnboardingScreen2(),
     );
   }
 }
