@@ -6,6 +6,7 @@ const kPrimaryColorDark = Color(0xFF0A244C);
 const kElevatedBtnPressedColor = Color(0xFF0354d3);
 const kTextBtnPressedColor = Color(0xFFF0F0F0);
 const kBackgroundColor = Color.fromARGB(255, 255, 255, 255);
+const kBlackLight = Color(0xFF2E2E2E);
 
 ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: kBackgroundColor,
@@ -19,6 +20,10 @@ ThemeData lightTheme = ThemeData(
       darkColor: kElevatedBtnPressedColor, lightColor: kPrimaryColor),
   textButtonTheme: _getTextButtonTheme(
       darkColor: kTextBtnPressedColor, lightColor: Colors.white),
+  textTheme: _textTheme.apply(
+    bodyColor: Colors.black,
+    displayColor: Colors.black,
+  ),
 );
 
 ThemeData darkTheme = ThemeData(brightness: Brightness.dark);
@@ -102,3 +107,46 @@ TextButtonThemeData _getTextButtonTheme({
     ),
   );
 }
+
+const _textTheme = TextTheme(
+  displayLarge: TextStyle(
+    fontSize: 30,
+    fontWeight: FontWeight.bold,
+  ),
+  displayMedium: TextStyle(
+    fontSize: 27,
+    fontWeight: FontWeight.bold,
+  ),
+  displaySmall: TextStyle(
+    fontSize: 23,
+    fontWeight: FontWeight.bold,
+  ),
+  headlineMedium: TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+  ),
+  headlineSmall: TextStyle(
+    fontSize: 17,
+    fontWeight: FontWeight.bold,
+  ),
+  bodyLarge: TextStyle(
+    fontSize: 17,
+    fontWeight: FontWeight.w600,
+  ),
+  bodyMedium: TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+  ),
+  bodySmall: TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+  ),
+  titleMedium: TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+  ),
+  titleSmall: TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+  ),
+);

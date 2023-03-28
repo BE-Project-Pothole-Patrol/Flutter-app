@@ -1,6 +1,7 @@
+import 'package:app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'theme/theme_constants.dart';
-import 'theme/theme_manager.dart';
+import 'themes/theme_constants.dart';
+import 'themes/theme_manager.dart';
 import 'screens/onboarding_screen1.dart';
 import 'screens/onboarding_screen2.dart';
 

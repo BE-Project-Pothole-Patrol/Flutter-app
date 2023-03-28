@@ -21,12 +21,9 @@ class SplashScreen extends StatelessWidget {
               SizedBox(
                 height: size.height * 0.05,
               ),
-              const Text(
+              Text(
                 "PotNoHole",
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 30, 
-                  fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.displayLarge,
               )
             ],
           ),

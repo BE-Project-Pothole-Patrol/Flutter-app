@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../themes/theme_constants.dart';
+
 class OnboardingScreen2 extends StatelessWidget {
   const OnboardingScreen2({super.key});
 
@@ -22,12 +24,9 @@ class OnboardingScreen2 extends StatelessWidget {
               SizedBox(
                 height: size.height * 0.03,
               ),
-              const Text(
+              Text(
                 "Get Live Pothole Alerts",
-                style: TextStyle(
-                  fontSize: 27,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.displayMedium,
               ),
               SizedBox(
                 height: size.height * 0.01,
@@ -36,11 +35,9 @@ class OnboardingScreen2 extends StatelessWidget {
                 width: size.width * 0.8,
                 child: Text(
                   "Korem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim",
-                  style: TextStyle(
-                    color: const Color(0xFF2E2E2E).withOpacity(0.7),
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                  ),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: kBlackLight.withOpacity(0.7),
+                      ),
                   textAlign: TextAlign.center,
                 ),
               ),
