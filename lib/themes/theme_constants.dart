@@ -7,6 +7,7 @@ const kElevatedBtnPressedColor = Color(0xFF0354d3);
 const kTextBtnPressedColor = Color(0xFFF0F0F0);
 const kBackgroundColor = Color.fromARGB(255, 255, 255, 255);
 const kBlackLight = Color(0xFF2E2E2E);
+const kFocusBorder = Color(0xFF7caefd);
 
 ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: kBackgroundColor,
@@ -23,6 +24,13 @@ ThemeData lightTheme = ThemeData(
   textTheme: _textTheme.apply(
     bodyColor: Colors.black,
     displayColor: Colors.black,
+  ),
+  inputDecorationTheme: const InputDecorationTheme(
+    focusedBorder: UnderlineInputBorder(
+      borderSide: BorderSide(
+        color: kFocusBorder,
+      ),
+    ),
   ),
 );
 
