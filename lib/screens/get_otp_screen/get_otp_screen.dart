@@ -23,7 +23,7 @@ class GetOtpScreen extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(
-                  height: size.height * 0.08,
+                  height: size.height * 0.06,
                 ),
                 Image.asset(
                   'assets/images/getotp.jpg',

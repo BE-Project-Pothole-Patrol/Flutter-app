@@ -5,6 +5,7 @@ import 'themes/theme_manager.dart';
 import 'screens/onboarding_screen1.dart';
 import 'screens/onboarding_screen2.dart';
 import 'screens/get_otp_screen/get_otp_screen.dart';
+import 'screens/verify_otp_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: _themeManager.themeMode,
-      home: const GetOtpScreen(),
+      home: const VerifyOtpScreen(),
     );
   }
 }
