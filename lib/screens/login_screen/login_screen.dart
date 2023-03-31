@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../../themes/theme_constants.dart';
 import '../../widgets/choice_divider.dart';
 import '../../widgets/google_auth_text_btn.dart';
 import '../../widgets/user_data_field.dart';
-import '../../themes/theme_constants.dart';
+import '../register_screen/register_screen.dart';
 
-class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,52 +23,34 @@ class RegisterScreen extends StatelessWidget {
                   height: size.height * 0.02,
                 ),
                 Text(
-                  "Sign Up",
+                  "Sign In",
                   style: Theme.of(context).textTheme.displayMedium,
                 ),
                 SizedBox(
                   height: size.height * 0.01,
                 ),
                 Text(
-                  "Welcome!",
+                  "Welcome back!",
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: kBlackLight.withOpacity(0.7),
                       ),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(
-                  height: size.height * 0.03,
-                ),
-                UserDataField(
-                  icName: Icons.person_2_outlined,
-                  hint: "First Name",
-                  width: size.width * 0.8,
-                  spacing: size.width * 0.02,
-                ),
-                SizedBox(
                   height: size.height * 0.01,
                 ),
-                UserDataField(
-                  icName: Icons.person_2_outlined,
-                  hint: "Last Name",
-                  width: size.width * 0.8,
-                  spacing: size.width * 0.02,
+                Image.asset(
+                  'assets/images/signin.jpg',
+                  width: size.width * 0.6,
+                  height: size.width * 0.45,
+                  fit: BoxFit.fitWidth,
                 ),
                 SizedBox(
-                  height: size.height * 0.01,
-                ),
-                UserDataField(
-                  icName: Icons.account_circle_outlined,
-                  hint: "Username",
-                  width: size.width * 0.8,
-                  spacing: size.width * 0.02,
-                ),
-                SizedBox(
-                  height: size.height * 0.01,
+                  height: size.height * 0.005,
                 ),
                 UserDataField(
                   icName: Icons.email_outlined,
-                  hint: "Email",
+                  hint: "First Name",
                   width: size.width * 0.8,
                   spacing: size.width * 0.02,
                 ),
@@ -81,16 +64,19 @@ class RegisterScreen extends StatelessWidget {
                   spacing: size.width * 0.02,
                 ),
                 SizedBox(
-                  height: size.height * 0.01,
-                ),
-                UserDataField(
-                  icName: Icons.vpn_key_outlined,
-                  hint: "Confirm Password",
-                  width: size.width * 0.8,
-                  spacing: size.width * 0.02,
+                  height: size.height * 0.03,
                 ),
                 SizedBox(
-                  height: size.height * 0.06,
+                  width: size.width*0.8,
+                  child: Text(
+                    "Forgot Password?",
+                    textAlign: TextAlign.right,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600, color: kPrimaryColor),
+                  ),
+                ),
+                SizedBox(
+                  height: size.height * 0.03,
                 ),
                 SizedBox(
                   width: size.width * 0.8,
@@ -128,47 +114,12 @@ class RegisterScreen extends StatelessWidget {
                 ),
                 SizedBox(
                   width: size.width * 0.8,
-                  child: const PartialColoredText(normalText:"Already Have an Account? ",semiBoldText: "Sign In",color:kPrimaryColor),
+                  child: const PartialColoredText(normalText:"New User? ",semiBoldText: "Sign Up",color:kPrimaryColor),
                 ),
               ],
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class PartialColoredText extends StatelessWidget {
-  const PartialColoredText({
-    super.key,
-    required this.normalText,
-    required this.semiBoldText, 
-    required this.color,
-  });
-
-  final String normalText;
-  final String semiBoldText;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: kBlackLight.withOpacity(0.9),
-            ),
-        children: [
-          TextSpan(text: normalText),
-          TextSpan(
-            text: semiBoldText,
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(fontWeight: FontWeight.w600, color: color),
-          ),
-        ],
       ),
     );
   }

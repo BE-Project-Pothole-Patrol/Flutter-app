@@ -34,7 +34,7 @@ ThemeData lightTheme = ThemeData(
   inputDecorationTheme: const InputDecorationTheme(
     hintStyle: TextStyle(
       color: kHintGrey,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w300,
     ),
     border: UnderlineInputBorder(borderSide: BorderSide(color: kBorderGrey)),
     enabledBorder:

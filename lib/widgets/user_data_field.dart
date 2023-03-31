@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../themes/theme_constants.dart';
+import '../themes/theme_constants.dart';
 
 class UserDataField extends StatelessWidget {
   const UserDataField(
@@ -30,7 +30,7 @@ class UserDataField extends StatelessWidget {
           !usesSvg
               ? Icon(
                   icName,
-                  size: 35,
+                  size: 32,
                   color: kIconGrey,
                 )
               : SvgPicture.asset(
