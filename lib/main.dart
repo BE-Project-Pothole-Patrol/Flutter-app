@@ -1,3 +1,4 @@
+import 'package:app/screens/register_screen/register_screen.dart';
 import 'package:app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'themes/theme_constants.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: _themeManager.themeMode,
-      home: const VerifyOtpScreen(),
+      home: const RegisterScreen(),
     );
   }
 }

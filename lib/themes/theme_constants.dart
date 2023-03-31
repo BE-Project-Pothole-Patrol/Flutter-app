@@ -8,8 +8,14 @@ const kTextBtnPressedColor = Color(0xFFF0F0F0);
 const kBackgroundColor = Color.fromARGB(255, 255, 255, 255);
 const kBlackLight = Color(0xFF2E2E2E);
 const kFocusBorder = Color(0xFF7caefd);
+const kIconGrey = Color(0xFF808080);
+const kBorderGrey = Color(0xFF8a8a8a);
+const kHintGrey = Color(0xFFA8A8A8);
+const kWhiteDark = Color(0xFFF5F5F5);
+const kWhiteDarker = Color(0xFFe6e6e6);
 
 ThemeData lightTheme = ThemeData(
+  dividerColor: kBorderGrey,
   scaffoldBackgroundColor: kBackgroundColor,
   primaryColor: kPrimaryColor,
   primaryColorDark: kPrimaryColorDark,
@@ -26,6 +32,13 @@ ThemeData lightTheme = ThemeData(
     displayColor: Colors.black,
   ),
   inputDecorationTheme: const InputDecorationTheme(
+    hintStyle: TextStyle(
+      color: kHintGrey,
+      fontWeight: FontWeight.w400,
+    ),
+    border: UnderlineInputBorder(borderSide: BorderSide(color: kBorderGrey)),
+    enabledBorder:
+        UnderlineInputBorder(borderSide: BorderSide(color: kBorderGrey)),
     focusedBorder: UnderlineInputBorder(
       borderSide: BorderSide(
         color: kFocusBorder,
