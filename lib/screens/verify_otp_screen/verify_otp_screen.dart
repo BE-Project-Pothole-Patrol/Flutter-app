@@ -1,32 +1,27 @@
 import 'package:flutter/material.dart';
-import '../../themes/theme_constants.dart';
-import 'widgets/user_input_for_otp.dart';
 
+import '../../../themes/theme_constants.dart';
+import '../../widgets/partial_colored_text.dart';
+import 'widgets/otp_text_field.dart';
 
-class GetOtpScreen extends StatelessWidget {
-  const GetOtpScreen({super.key});
+class VerifyOtpScreen extends StatelessWidget {
+  const VerifyOtpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final List<PhoneCodeModel> list = [
-      PhoneCodeModel(id: 0, phoneCode: '+91', countryCode: 'in',countryName: 'India'),
-      PhoneCodeModel(id: 1, phoneCode: '+1', countryCode: 'us',countryName: 'US'),
-      PhoneCodeModel(id: 1, phoneCode: '+44', countryCode: 'gb-eng',countryName: 'UK'),
-    ];
 
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          child: SizedBox(
-            width: size.width,
+          child: Center(
             child: Column(
               children: [
                 SizedBox(
                   height: size.height * 0.06,
                 ),
                 Image.asset(
-                  'assets/images/getotp.jpg',
+                  'assets/images/verifyotp.jpg',
                   width: size.width * 0.8,
                   height: size.width * 0.8,
                 ),
@@ -34,7 +29,7 @@ class GetOtpScreen extends StatelessWidget {
                   height: size.height * 0.01,
                 ),
                 Text(
-                  "Enter Your Mobile No.",
+                  "Verify OTP Screen",
                   style: Theme.of(context).textTheme.displayMedium,
                 ),
                 SizedBox(
@@ -42,23 +37,17 @@ class GetOtpScreen extends StatelessWidget {
                 ),
                 SizedBox(
                   width: size.width * 0.8,
-                  child: Text(
-                    "We will send you an OTP (One Time Password) on your number",
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: kBlackLight.withOpacity(0.7),
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
+                  child: const PartialColoredText(normalText: "Enter OTP sent to ",semiBoldText: "+91 9820485183",color:Colors.black),
                 ),
                 SizedBox(
                   height: size.height * 0.01,
                 ),
                 SizedBox(
                   width: size.width * 0.8,
-                  child: UserInputForOtp(list: list),
+                  child: OtpTextField(width: size.width*0.12),
                 ),
                 SizedBox(
-                  height: size.height * 0.035,
+                  height: size.height * 0.05,
                 ),
                 SizedBox(
                   width: size.width * 0.8,
@@ -72,8 +61,15 @@ class GetOtpScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                    child: const Text('Get OTP'),
+                    child: const Text('Verify'),
                   ),
+                ),
+                SizedBox(
+                  height: size.height * 0.03,
+                ),
+                SizedBox(
+                  width: size.width * 0.8,
+                  child:const PartialColoredText(normalText:"Didn't Receive OTP? ",semiBoldText: "Resend OTP",color:kPrimaryColor),
                 ),
               ],
             ),
@@ -83,4 +79,5 @@ class GetOtpScreen extends StatelessWidget {
     );
   }
 }
+
 

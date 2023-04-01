@@ -3,22 +3,19 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../themes/theme_constants.dart';
 
-class UserDataField extends StatelessWidget {
-  const UserDataField(
-      {super.key,
-      this.icName = Icons.person_2_outlined,
-      required this.hint,
-      required this.width,
-      required this.spacing,
-      this.usesSvg = false,
-      this.svgName = ''});
+class UserDataTextField extends StatelessWidget {
+  const UserDataTextField({
+    super.key,
+    this.icName = Icons.person_2_outlined,
+    required this.hint,
+    required this.width,
+    required this.spacing,
+  });
 
   final IconData icName;
   final String hint;
   final double width;
   final double spacing;
-  final bool usesSvg;
-  final String svgName;
 
   @override
   Widget build(BuildContext context) {
@@ -27,17 +24,11 @@ class UserDataField extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          !usesSvg
-              ? Icon(
-                  icName,
-                  size: 32,
-                  color: kIconGrey,
-                )
-              : SvgPicture.asset(
-                  "assets/icons/$svgName",
-                  width: 30,
-                  height: 30,
-                ),
+          Icon(
+            icName,
+            size: 32,
+            color: kIconGrey,
+          ),
           SizedBox(
             width: spacing,
           ),
