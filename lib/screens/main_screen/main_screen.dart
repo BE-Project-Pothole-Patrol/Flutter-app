@@ -16,6 +16,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final isKeyboard = MediaQuery.of(context).viewInsets.bottom != 0;
 
     return Scaffold(
       body: SafeArea(
@@ -24,11 +25,12 @@ class _MainScreenState extends State<MainScreen> {
           children: [
             _selected == 0
                 ? const Positioned.fill(
-                    child: ReportPotholesTab(),
+                  child: ReportPotholesTab(),
                   )
                 : const Positioned.fill(
                     child: PotholesMapTab(),
                   ),
+            if(!isKeyboard)      
             Positioned(
               bottom: size.height * 0.05,
               child: CustomBottomNavBar(

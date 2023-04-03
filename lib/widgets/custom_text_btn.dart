@@ -2,13 +2,19 @@ import 'package:flutter/material.dart';
 
 import '../../../themes/theme_constants.dart';
 
-class GoogleAuthTextBtn extends StatelessWidget {
-  const GoogleAuthTextBtn({
+class CustomTextBtn extends StatelessWidget {
+  const CustomTextBtn({
     super.key,
     required this.size,
+    required this.text,
+    this.prefImagePath = "assets/images/googlelogo.png",
+    this.hidePrefImage = false,
   });
 
   final Size size;
+  final String text;
+  final String prefImagePath;
+  final bool hidePrefImage;
 
   @override
   Widget build(BuildContext context) {
@@ -39,16 +45,18 @@ class GoogleAuthTextBtn extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            "assets/images/googlelogo.png",
-            width: 25,
-            height: 25,
-          ),
-          SizedBox(
-            width: size.width * 0.03,
-          ),
+          if (!hidePrefImage)
+            Image.asset(
+              prefImagePath,
+              width: 25,
+              height: 25,
+            ),
+          if (!hidePrefImage)
+            SizedBox(
+              width: size.width * 0.03,
+            ),
           Text(
-            "Sign Up with Google",
+            text,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontSize: 16,
                   color: kPrimaryColor,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../themes/theme_constants.dart';
 import '../../widgets/choice_divider.dart';
-import '../../widgets/google_auth_text_btn.dart';
+import '../../widgets/custom_text_btn.dart';
 import '../../widgets/user_data_text_field.dart';
 import '../../widgets/partial_colored_text.dart';
 
@@ -107,7 +107,7 @@ class LoginScreen extends StatelessWidget {
                 SizedBox(
                   width: size.width * 0.8,
                   height: 50,
-                  child: GoogleAuthTextBtn(size: size),
+                  child: CustomTextBtn(size: size, text: "Sign In with Google",),
                 ),
                 SizedBox(
                   height: size.height * 0.02,
