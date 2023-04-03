@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../themes/theme_constants.dart';
 
-class CustomTextBtn extends StatelessWidget {
-  const CustomTextBtn({
+class CustomTextButton extends StatelessWidget {
+  const CustomTextButton({
     super.key,
     required this.size,
     required this.text,

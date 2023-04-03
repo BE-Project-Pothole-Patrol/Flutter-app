@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../widgets/choice_divider.dart';
-import '../../widgets/custom_text_btn.dart';
+import '../../widgets/custom_text_button.dart';
 import '../../widgets/user_data_text_field.dart';
 import '../../widgets/partial_colored_text.dart';
 import '../../themes/theme_constants.dart';
@@ -122,7 +122,7 @@ class RegisterScreen extends StatelessWidget {
                 SizedBox(
                   width: size.width * 0.8,
                   height: 50,
-                  child: CustomTextBtn(size: size, text: "Sign Up with Google",),
+                  child: CustomTextButton(size: size, text: "Sign Up with Google",),
                 ),
                 SizedBox(
                   height: size.height * 0.02,

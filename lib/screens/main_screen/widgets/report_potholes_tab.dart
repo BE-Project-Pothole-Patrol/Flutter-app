@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../themes/theme_constants.dart';
-import '../../../widgets/custom_text_btn.dart';
+import '../../../widgets/custom_text_button.dart';
 
 class ReportPotholesTab extends StatefulWidget {
   const ReportPotholesTab({super.key});
@@ -102,7 +102,7 @@ class _ReportPotholesTabState extends State<ReportPotholesTab> {
             ),
             SizedBox(
               width: size.width*0.8,
-              child: CustomTextBtn(
+              child: CustomTextButton(
                 text: "Submit & Report",
                 size: size,
                 hidePrefImage: true,
