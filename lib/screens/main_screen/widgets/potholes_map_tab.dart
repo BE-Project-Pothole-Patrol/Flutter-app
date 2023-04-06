@@ -39,6 +39,7 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
               onMapCreated: (GoogleMapController controller) {
                 _controller.complete(controller);
               },
+              padding: EdgeInsets.only(bottom: size.height*0.45),
             ),
             Positioned(
               bottom: size.height * 0.05 + 75,
