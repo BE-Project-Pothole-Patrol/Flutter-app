@@ -48,7 +48,6 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
             LocationSearchBar(
               width: size.width * 0.85,
               marginTop: size.height * 0.03,
-              space: size.width * 0.02,
             ),
           ],
         ),
