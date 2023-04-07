@@ -42,6 +42,7 @@ class _MainScreenState extends State<MainScreen> {
                     },
                   );
                 },
+                selected: _selected,
               ),
             ),
           ],

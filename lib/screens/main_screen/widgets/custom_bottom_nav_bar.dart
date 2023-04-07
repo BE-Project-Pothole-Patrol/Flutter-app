@@ -10,19 +10,28 @@ class CustomBottomNavBar extends StatefulWidget {
     required this.width,
     required this.onTabTapped,
     this.height = 65,
+    this.selected = 0,
   });
 
   final double horizontalPadding;
   final double height;
   final double width;
   final Function(int) onTabTapped;
+  final int selected;
 
   @override
   State<CustomBottomNavBar> createState() => _CustomBottomNavBarState();
 }
 
 class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
-  int _selected = 0;
+  late int _selected;
+
+  @override
+  void initState() {
+    super.initState();
+    _selected = widget.selected;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
