@@ -14,10 +14,12 @@ class MapNavInput extends StatefulWidget {
     super.key,
     required this.size,
     this.mode = TravelMode.car,
+    required this.onPress,
   });
 
   final Size size;
   final TravelMode mode;
+  final Function(bool) onPress;
 
   @override
   State<MapNavInput> createState() => _MapNavInputState();
@@ -59,7 +61,9 @@ class _MapNavInputState extends State<MapNavInput> {
           Container(
             color: Colors.white,
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                widget.onPress(false);
+              },
               child: const Align(
                 alignment: Alignment.topLeft,
                 child: Icon(

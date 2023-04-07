@@ -4,7 +4,12 @@ import 'package:app/themes/theme_constants.dart';
 class NavigateButton extends StatelessWidget {
   const NavigateButton({
     super.key,
+    required this.onPress,
+    this.isExpanded = false,
   });
+
+  final Function(bool) onPress;
+  final bool isExpanded;
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +17,9 @@ class NavigateButton extends StatelessWidget {
       borderRadius: const BorderRadius.all(Radius.circular(10)),
       color: Colors.white,
       child: InkWell(
-        onTap: (){},
+        onTap: () {
+          onPress(true);
+        },
         splashColor: kWhiteDarker,
         highlightColor: kWhiteDarker,
         borderRadius: const BorderRadius.all(Radius.circular(10)),

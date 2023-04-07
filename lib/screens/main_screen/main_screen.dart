@@ -25,26 +25,27 @@ class _MainScreenState extends State<MainScreen> {
           children: [
             _selected == 0
                 ? const Positioned.fill(
-                  child: ReportPotholesTab(),
+                    child: ReportPotholesTab(),
                   )
                 : const Positioned.fill(
                     child: PotholesMapTab(),
                   ),
-            if(!isKeyboard)      
-            Positioned(
-              bottom: size.height * 0.05,
-              child: CustomBottomNavBar(
-                width: size.width * 0.85,
-                horizontalPadding: size.width * 0.1,
-                onTabTapped: (pos) {
-                  setState(() {
-                      _selected = pos;
-                    },
-                  );
-                },
-                selected: _selected,
+            if (!isKeyboard)
+              Positioned(
+                bottom: size.height * 0.05,
+                child: CustomBottomNavBar(
+                  width: size.width * 0.85,
+                  horizontalPadding: size.width * 0.1,
+                  onTabTapped: (pos) {
+                    setState(
+                      () {
+                        _selected = pos;
+                      },
+                    );
+                  },
+                  selected: _selected,
+                ),
               ),
-            ),
           ],
         ),
       ),
