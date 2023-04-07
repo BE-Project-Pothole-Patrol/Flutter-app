@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../themes/theme_constants.dart';
 import 'location_search_bar.dart';
+import 'map_nav_input.dart';
 import 'navigate_button.dart';
 
 class PotholesMapTab extends StatefulWidget {
@@ -39,22 +41,22 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
               onMapCreated: (GoogleMapController controller) {
                 _controller.complete(controller);
               },
-              padding: EdgeInsets.only(bottom: size.height*0.45),
+              padding: EdgeInsets.only(bottom: size.height * 0.45),
             ),
-            Positioned(
-              bottom: size.height * 0.05 + 75,
-              right: 10,
-              child: const NavigateButton(),
-            ),
-            LocationSearchBar(
-              width: size.width * 0.85,
-              marginTop: size.height * 0.03,
-            ),
+            MapNavInput(size: size),
+            // Positioned(
+            //   bottom: size.height * 0.05 + 75,
+            //   right: 10,
+            //   child: const NavigateButton(),
+            // ),
+            // LocationSearchBar(
+            //   width: size.width * 0.85,
+            //   marginTop: size.height * 0.03,
+            // ),
           ],
         ),
       ),
     );
   }
 }
-
 
