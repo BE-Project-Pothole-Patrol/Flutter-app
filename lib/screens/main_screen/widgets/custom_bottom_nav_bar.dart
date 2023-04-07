@@ -29,6 +29,14 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
   @override
   void initState() {
     super.initState();
+    debugPrint('initState called');
+    _selected = widget.selected;
+  }
+
+  @override
+  void didUpdateWidget(covariant CustomBottomNavBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    debugPrint('didUpdateWidget called');
     _selected = widget.selected;
   }
 
