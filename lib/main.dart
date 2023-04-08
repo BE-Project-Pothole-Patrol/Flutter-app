@@ -1,6 +1,7 @@
 import 'package:app/screens/register_screen/register_screen.dart';
 import 'package:app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'routing/route_generator.dart';
 import 'screens/login_screen/login_screen.dart';
 import 'screens/main_screen/main_screen.dart';
 import 'themes/theme_constants.dart';
@@ -23,11 +24,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'PotNoHole',
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: _themeManager.themeMode,
-      home: const MainScreen(),
+      initialRoute: '/splashScreen',
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }

@@ -82,7 +82,12 @@ class LoginScreen extends StatelessWidget {
                   width: size.width * 0.8,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(
+                          '/mainScreen',
+                          arguments: '',
+                        );
+                    },
                     style:
                         Theme.of(context).elevatedButtonTheme.style?.copyWith(
                               shape: MaterialStateProperty.all<OutlinedBorder>(
@@ -114,7 +119,12 @@ class LoginScreen extends StatelessWidget {
                 ),
                 SizedBox(
                   width: size.width * 0.8,
-                  child: const PartialColoredText(normalText:"New User? ",semiBoldText: "Sign Up",color:kPrimaryColor),
+                  child: PartialColoredText(normalText:"New User? ",semiBoldText: "Sign Up",color:kPrimaryColor,onTap: (){
+                    Navigator.of(context).pushNamed(
+                          '/registerScreen',
+                          arguments: '',
+                        );
+                  },),
                 ),
               ],
             ),

@@ -63,7 +63,12 @@ class GetOtpScreen extends StatelessWidget {
                 SizedBox(
                   width: size.width * 0.8,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(
+                        '/verifyOtpScreen',
+                          arguments: '',
+                      );
+                    },
                     style:
                         Theme.of(context).elevatedButtonTheme.style?.copyWith(
                               shape: MaterialStateProperty.all<OutlinedBorder>(

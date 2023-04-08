@@ -37,14 +37,18 @@ class VerifyOtpScreen extends StatelessWidget {
                 ),
                 SizedBox(
                   width: size.width * 0.8,
-                  child: const PartialColoredText(normalText: "Enter OTP sent to ",semiBoldText: "+91 9820485183",color:Colors.black),
+                  child: PartialColoredText(
+                      normalText: "Enter OTP sent to ",
+                      semiBoldText: "+91 9820485183",
+                      color: Colors.black,
+                      onTap: (){},),
                 ),
                 SizedBox(
                   height: size.height * 0.01,
                 ),
                 SizedBox(
                   width: size.width * 0.8,
-                  child: OtpTextField(width: size.width*0.12),
+                  child: OtpTextField(width: size.width * 0.12),
                 ),
                 SizedBox(
                   height: size.height * 0.05,
@@ -52,7 +56,12 @@ class VerifyOtpScreen extends StatelessWidget {
                 SizedBox(
                   width: size.width * 0.8,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(
+                        '/loginScreen',
+                        arguments: '',
+                      );
+                    },
                     style:
                         Theme.of(context).elevatedButtonTheme.style?.copyWith(
                               shape: MaterialStateProperty.all<OutlinedBorder>(
@@ -69,7 +78,11 @@ class VerifyOtpScreen extends StatelessWidget {
                 ),
                 SizedBox(
                   width: size.width * 0.8,
-                  child:const PartialColoredText(normalText:"Didn't Receive OTP? ",semiBoldText: "Resend OTP",color:kPrimaryColor),
+                  child: PartialColoredText(
+                      normalText: "Didn't Receive OTP? ",
+                      semiBoldText: "Resend OTP",
+                      color: kPrimaryColor,
+                      onTap: (){},),
                 ),
               ],
             ),
@@ -79,5 +92,3 @@ class VerifyOtpScreen extends StatelessWidget {
     );
   }
 }
-
-

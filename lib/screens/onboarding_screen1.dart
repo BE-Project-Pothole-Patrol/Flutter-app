@@ -45,12 +45,22 @@ class OnboardingScreen1 extends StatelessWidget {
                 child: Row(
                   children: [
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          '/generateOtpScreen',
+                          arguments: '',
+                        );
+                      },
                       child: const Text('Skip'),
                     ),
                     const Spacer(),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          '/onboardingScreen2',
+                          arguments: '',
+                        );
+                      },
                       child: const Text('Next'),
                     ),
                   ],

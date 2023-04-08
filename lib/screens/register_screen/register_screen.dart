@@ -97,7 +97,12 @@ class RegisterScreen extends StatelessWidget {
                   width: size.width * 0.8,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(
+                          '/mainScreen',
+                          arguments: '',
+                        );
+                    },
                     style:
                         Theme.of(context).elevatedButtonTheme.style?.copyWith(
                               shape: MaterialStateProperty.all<OutlinedBorder>(
@@ -129,7 +134,7 @@ class RegisterScreen extends StatelessWidget {
                 ),
                 SizedBox(
                   width: size.width * 0.8,
-                  child: const PartialColoredText(normalText:"Already Have an Account? ",semiBoldText: "Sign In",color:kPrimaryColor),
+                  child: PartialColoredText(normalText:"Already Have an Account? ",semiBoldText: "Sign In",color:kPrimaryColor, onTap:(){},),
                 ),
               ],
             ),

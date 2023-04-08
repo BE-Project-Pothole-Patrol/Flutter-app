@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../themes/theme_constants.dart';
@@ -6,13 +7,15 @@ class PartialColoredText extends StatelessWidget {
   const PartialColoredText({
     super.key,
     required this.normalText,
-    required this.semiBoldText, 
+    required this.semiBoldText,
     required this.color,
+    required this.onTap,
   });
 
   final String normalText;
   final String semiBoldText;
   final Color color;
+  final void Function() onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +33,8 @@ class PartialColoredText extends StatelessWidget {
                 .textTheme
                 .bodyMedium
                 ?.copyWith(fontWeight: FontWeight.w600, color: color),
+            recognizer: TapGestureRecognizer()
+              ..onTap = onTap,
           ),
         ],
       ),

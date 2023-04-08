@@ -46,13 +46,14 @@ class OnboardingScreen2 extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                 child: Row(
                   children: [
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text('Skip'),
-                    ),
                     const Spacer(),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          '/generateOtpScreen',
+                          arguments: '',
+                        );
+                      },
                       child: const Text('Next'),
                     ),
                   ],
