@@ -125,7 +125,7 @@ class _MapNavInputState extends State<MapNavInput> {
                   textAlign: TextAlign.left,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w500,
-                        fontSize: 18,
+                        fontSize: 16,
                       ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -134,13 +134,16 @@ class _MapNavInputState extends State<MapNavInput> {
                     return null;
                   },
                   textAlignVertical: TextAlignVertical.bottom,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(
                       Icons.location_on,
-                      size: 35,
+                      size: 30,
                       color: kPrimaryColor,
                     ),
                     hintText: "Enter Start Location",
+                    hintStyle: Theme.of(context).inputDecorationTheme.hintStyle?.copyWith(
+                      fontSize: 16,
+                    ),
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
@@ -204,7 +207,7 @@ class _MapNavInputState extends State<MapNavInput> {
                   textAlign: TextAlign.left,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w500,
-                        fontSize: 18,
+                        fontSize: 16,
                       ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -213,13 +216,16 @@ class _MapNavInputState extends State<MapNavInput> {
                     return null;
                   },
                   textAlignVertical: TextAlignVertical.bottom,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(
                       Icons.location_on,
-                      size: 35,
+                      size: 30,
                       color: kDestinationMarkerRed,
                     ),
                     hintText: "Enter Destination Location",
+                    hintStyle: Theme.of(context).inputDecorationTheme.hintStyle?.copyWith(
+                      fontSize: 16,
+                    ),
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,

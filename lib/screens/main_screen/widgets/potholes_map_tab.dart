@@ -57,7 +57,7 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
               ),
             if (isExpanded)
               Positioned(
-                bottom: size.height * 0.05 + 75,
+                bottom: size.height * 0.03 + 65,
                 child: SizedBox(
                   width: size.width * 0.85,
                   child: Row(
@@ -77,7 +77,7 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
               ),
             if (!isExpanded)
               Positioned(
-                bottom: size.height * 0.05 + 75,
+                bottom: size.height * 0.03 + 65,
                 right: 10,
                 child: NavigateButton(onPress: (val) {
                   setState(() {

@@ -9,7 +9,7 @@ class CustomBottomNavBar extends StatefulWidget {
     required this.horizontalPadding,
     required this.width,
     required this.onTabTapped,
-    this.height = 65,
+    this.height = 55,
     this.selected = 0,
   });
 
@@ -49,16 +49,23 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
       decoration: const BoxDecoration(
         color: kPrimaryColor,
         borderRadius: BorderRadius.all(
-          Radius.circular(20),
+          Radius.circular(30),
         ),
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(0, 2.0),
+            color: Colors.grey,
+            blurRadius: 5.0,
+          )
+        ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 55,
-            height: 55,
+            width: 45,
+            height: 45,
             alignment: Alignment.center,
             decoration: _selected == 0
                 ? const BoxDecoration(
@@ -77,7 +84,9 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
               },
               child: SvgPicture.asset(
                 "assets/icons/report_pothole_ic.svg",
-                fit: BoxFit.scaleDown,
+                width: 35,
+                height: 35,
+                fit: BoxFit.fill,
                 colorFilter: _selected == 0
                     ? const ColorFilter.mode(kPrimaryColor, BlendMode.srcIn)
                     : const ColorFilter.mode(Colors.white, BlendMode.srcIn),
@@ -85,8 +94,8 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             ),
           ),
           Container(
-            width: 55,
-            height: 55,
+            width: 45,
+            height: 45,
             alignment: Alignment.center,
             decoration: _selected == 1
                 ? const BoxDecoration(
@@ -105,7 +114,9 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
               },
               child: SvgPicture.asset(
                 "assets/icons/pothole_map_ic.svg",
-                fit: BoxFit.scaleDown,
+                width: 30,
+                height: 30,
+                fit: BoxFit.fill,
                 colorFilter: _selected == 1
                     ? const ColorFilter.mode(kPrimaryColor, BlendMode.srcIn)
                     : const ColorFilter.mode(Colors.white, BlendMode.srcIn),

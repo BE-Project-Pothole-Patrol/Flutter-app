@@ -32,10 +32,10 @@ class _MainScreenState extends State<MainScreen> {
                   ),
             if (!isKeyboard)
               Positioned(
-                bottom: size.height * 0.05,
+                bottom: size.height * 0.03,
                 child: CustomBottomNavBar(
-                  width: size.width * 0.85,
-                  horizontalPadding: size.width * 0.1,
+                  width: size.width * 0.87,
+                  horizontalPadding: size.width * 0.13,
                   onTabTapped: (pos) {
                     setState(
                       () {

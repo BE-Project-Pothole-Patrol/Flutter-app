@@ -72,7 +72,7 @@ class LocationSearchBar extends StatelessWidget {
             textAlign: TextAlign.left,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w500,
-                  fontSize: 18,
+                  fontSize: 17,
                 ),
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -81,13 +81,16 @@ class LocationSearchBar extends StatelessWidget {
               return null;
             },
             textAlignVertical: TextAlignVertical.bottom,
-            decoration: const InputDecoration(
-              prefixIcon: Icon(
+            decoration: InputDecoration(
+              prefixIcon: const Icon(
                 Icons.location_on,
-                size: 35,
+                size: 30,
                 color: kPrimaryColor,
               ),
               hintText: "Search Location",
+              hintStyle: Theme.of(context).inputDecorationTheme.hintStyle?.copyWith(
+                      fontSize: 17,
+                    ),
               border: InputBorder.none,
               focusedBorder: InputBorder.none,
               enabledBorder: InputBorder.none,
