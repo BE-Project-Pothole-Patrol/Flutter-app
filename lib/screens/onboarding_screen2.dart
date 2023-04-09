@@ -11,8 +11,7 @@ class OnboardingScreen2 extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: SizedBox(
-          width: size.width,
+        child: Center(
           child: Column(
             children: [
               Image.asset(

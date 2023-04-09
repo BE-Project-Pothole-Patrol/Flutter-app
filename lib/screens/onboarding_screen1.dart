@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../themes/theme_constants.dart';
 
 class OnboardingScreen1 extends StatelessWidget {
@@ -10,8 +11,7 @@ class OnboardingScreen1 extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: SizedBox(
-          width: size.width,
+        child: Center(
           child: Column(
             children: [
               Image.asset(
