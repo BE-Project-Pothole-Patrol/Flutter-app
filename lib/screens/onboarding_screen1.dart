@@ -46,7 +46,7 @@ class OnboardingScreen1 extends StatelessWidget {
                   children: [
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed(
+                        Navigator.of(context).pushReplacementNamed(
                           '/generateOtpScreen',
                           arguments: '',
                         );
