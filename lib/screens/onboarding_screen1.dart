@@ -56,7 +56,7 @@ class OnboardingScreen1 extends StatelessWidget {
                     const Spacer(),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed(
+                        Navigator.of(context).pushReplacementNamed(
                           '/onboardingScreen2',
                           arguments: '',
                         );

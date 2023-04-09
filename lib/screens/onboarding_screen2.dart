@@ -48,7 +48,7 @@ class OnboardingScreen2 extends StatelessWidget {
                     const Spacer(),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed(
+                        Navigator.of(context).pushReplacementNamed(
                           '/generateOtpScreen',
                           arguments: '',
                         );
