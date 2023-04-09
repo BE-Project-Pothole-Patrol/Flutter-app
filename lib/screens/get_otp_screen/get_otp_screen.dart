@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../themes/theme_constants.dart';
 import 'widgets/user_input_for_otp.dart';
 
@@ -12,14 +13,13 @@ class GetOtpScreen extends StatelessWidget {
     final List<PhoneCodeModel> list = [
       PhoneCodeModel(id: 0, phoneCode: '+91', countryCode: 'in',countryName: 'India'),
       PhoneCodeModel(id: 1, phoneCode: '+1', countryCode: 'us',countryName: 'US'),
-      PhoneCodeModel(id: 1, phoneCode: '+44', countryCode: 'gb-eng',countryName: 'UK'),
+      PhoneCodeModel(id: 2, phoneCode: '+44', countryCode: 'gb-eng',countryName: 'UK'),
     ];
 
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          child: SizedBox(
-            width: size.width,
+          child: Center(
             child: Column(
               children: [
                 SizedBox(
