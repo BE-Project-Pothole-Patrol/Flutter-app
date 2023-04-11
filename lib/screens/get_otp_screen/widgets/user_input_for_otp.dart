@@ -29,22 +29,20 @@ class UserInputForOtp extends StatelessWidget {
             items: list,
             selectedItem: list[0],
             dropdownBuilder: (context, selectedItem) {
-              return Expanded(
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      'icons/flags/svg/${selectedItem?.countryCode}.svg',
-                      package: 'country_icons',
-                      width: 15,
-                      height: 15,
-                    ),
-                    const Spacer(),
-                    Text(
-                      selectedItem?.phoneCode ?? "NA",
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ],
-                ),
+              return Row(
+                children: [
+                  SvgPicture.asset(
+                    'icons/flags/svg/${selectedItem?.countryCode}.svg',
+                    package: 'country_icons',
+                    width: 15,
+                    height: 15,
+                  ),
+                  const Spacer(),
+                  Text(
+                    selectedItem?.phoneCode ?? "NA",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
               );
             },
           ),
@@ -60,9 +58,9 @@ class UserInputForOtp extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyMedium,
             decoration: InputDecoration(
               hintText: 'Enter Your No.',
-              hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: const Color(0xFFA8A8A8),
-                  ),
+              hintStyle: Theme.of(context).inputDecorationTheme.hintStyle?.copyWith(
+                fontSize: 14,
+              ),
               floatingLabelBehavior: FloatingLabelBehavior.never,
             ),
           ),
