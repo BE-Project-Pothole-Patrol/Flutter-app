@@ -8,11 +8,10 @@ import '../screens/onboarding_screen2.dart';
 import '../screens/register_screen/register_screen.dart';
 import '../screens/splash_screen.dart';
 import '../screens/verify_otp_screen/verify_otp_screen.dart';
+import 'args/get_otp_screen_args.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    // Getting arguments passed in while calling Navigator.pushNamed
-    final args = settings.arguments;
 
     switch (settings.name) {
       case '/splashScreen':
@@ -22,7 +21,12 @@ class RouteGenerator {
       case '/onboardingScreen2':
         return MaterialPageRoute(builder: (_) => const OnboardingScreen2());
       case '/generateOtpScreen':
-        return MaterialPageRoute(builder: (_) => const GetOtpScreen());
+        return MaterialPageRoute(builder: (_) {
+          GetOtpScreenArgs args = settings.arguments as GetOtpScreenArgs;
+          return GetOtpScreen(
+            title: args.title,
+          );
+        });
       case '/verifyOtpScreen':
         return MaterialPageRoute(builder: (_) => const VerifyOtpScreen());
       case '/registerScreen':

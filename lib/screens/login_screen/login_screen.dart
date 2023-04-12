@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../routing/args/get_otp_screen_args.dart';
 import '../../themes/theme_constants.dart';
 import '../../widgets/choice_divider.dart';
 import '../../widgets/custom_text_button.dart';
@@ -121,8 +122,8 @@ class LoginScreen extends StatelessWidget {
                   width: size.width * 0.8,
                   child: PartialColoredText(normalText:"New User? ",semiBoldText: "Sign Up",color:kPrimaryColor,onTap: (){
                     Navigator.of(context).pushNamed(
-                          '/registerScreen',
-                          arguments: '',
+                          '/generateOtpScreen',
+                          arguments: GetOtpScreenArgs(title: "Register Your Mobile No."),
                         );
                   },),
                 ),

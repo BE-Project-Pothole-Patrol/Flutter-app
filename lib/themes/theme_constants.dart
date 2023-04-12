@@ -21,7 +21,11 @@ ThemeData lightTheme = ThemeData(
   primaryColor: kPrimaryColor,
   primaryColorDark: kPrimaryColorDark,
   appBarTheme: const AppBarTheme(
-    backgroundColor: kPrimaryColor, //use your hex code here
+    backgroundColor: kBackgroundColor,
+    elevation: 0,
+    iconTheme: IconThemeData(
+      color: kBlackLight,
+    )
   ),
   fontFamily: 'Poppins',
   elevatedButtonTheme: _getElevatedButtonTheme(

@@ -9,17 +9,17 @@ class VerifyOtpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      appBar: AppBar(
+        
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
             child: Column(
               children: [
-                SizedBox(
-                  height: size.height * 0.06,
-                ),
                 Image.asset(
                   'assets/images/verifyotp.jpg',
                   width: size.width * 0.8,
@@ -29,7 +29,7 @@ class VerifyOtpScreen extends StatelessWidget {
                   height: size.height * 0.01,
                 ),
                 Text(
-                  "Verify OTP Screen",
+                  "Verify OTP",
                   style: Theme.of(context).textTheme.displayMedium,
                 ),
                 SizedBox(
@@ -58,7 +58,7 @@ class VerifyOtpScreen extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pushNamed(
-                        '/loginScreen',
+                        '/registerScreen',
                         arguments: '',
                       );
                     },

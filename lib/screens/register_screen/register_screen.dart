@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../widgets/choice_divider.dart';
 import '../../widgets/custom_text_button.dart';
 import '../../widgets/user_data_text_field.dart';
-import '../../widgets/partial_colored_text.dart';
 import '../../themes/theme_constants.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -14,6 +13,9 @@ class RegisterScreen extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      appBar: AppBar(
+        
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
@@ -131,10 +133,6 @@ class RegisterScreen extends StatelessWidget {
                 ),
                 SizedBox(
                   height: size.height * 0.02,
-                ),
-                SizedBox(
-                  width: size.width * 0.8,
-                  child: PartialColoredText(normalText:"Already Have an Account? ",semiBoldText: "Sign In",color:kPrimaryColor, onTap:(){},),
                 ),
               ],
             ),

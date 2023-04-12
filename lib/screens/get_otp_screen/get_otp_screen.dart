@@ -3,28 +3,30 @@ import 'package:flutter/material.dart';
 import '../../themes/theme_constants.dart';
 import 'widgets/user_input_for_otp.dart';
 
-
 class GetOtpScreen extends StatelessWidget {
-  const GetOtpScreen({super.key});
+  const GetOtpScreen({super.key, this.title="Enter Your Mobile No."});
+
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final List<PhoneCodeModel> list = [
-      PhoneCodeModel(id: 0, phoneCode: '+91', countryCode: 'in',countryName: 'India'),
-      PhoneCodeModel(id: 1, phoneCode: '+1', countryCode: 'us',countryName: 'US'),
-      PhoneCodeModel(id: 2, phoneCode: '+44', countryCode: 'gb-eng',countryName: 'UK'),
+      PhoneCodeModel(
+          id: 0, phoneCode: '+91', countryCode: 'in', countryName: 'India'),
+      PhoneCodeModel(
+          id: 1, phoneCode: '+1', countryCode: 'us', countryName: 'US'),
+      PhoneCodeModel(
+          id: 2, phoneCode: '+44', countryCode: 'gb-eng', countryName: 'UK'),
     ];
 
     return Scaffold(
+      appBar: AppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
             child: Column(
               children: [
-                SizedBox(
-                  height: size.height * 0.06,
-                ),
                 Image.asset(
                   'assets/images/getotp.jpg',
                   width: size.width * 0.8,
@@ -34,7 +36,7 @@ class GetOtpScreen extends StatelessWidget {
                   height: size.height * 0.01,
                 ),
                 Text(
-                  "Enter Your Mobile No.",
+                  title,
                   style: Theme.of(context).textTheme.displayMedium,
                 ),
                 SizedBox(
@@ -66,7 +68,7 @@ class GetOtpScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).pushNamed(
                         '/verifyOtpScreen',
-                          arguments: '',
+                        arguments: '',
                       );
                     },
                     style:
@@ -88,4 +90,3 @@ class GetOtpScreen extends StatelessWidget {
     );
   }
 }
-

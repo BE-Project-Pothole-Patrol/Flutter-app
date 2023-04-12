@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../themes/theme_constants.dart';
+import '../utils/shared_prefs_util.dart';
 
 class OnboardingScreen1 extends StatelessWidget {
   const OnboardingScreen1({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
+    final SharedPreferencesManager prefs = SharedPreferencesManager();
 
     return Scaffold(
       body: SafeArea(
@@ -46,8 +48,9 @@ class OnboardingScreen1 extends StatelessWidget {
                   children: [
                     TextButton(
                       onPressed: () {
+                        prefs.setOnboardingCompleted(true);
                         Navigator.of(context).pushReplacementNamed(
-                          '/generateOtpScreen',
+                          '/loginScreen',
                           arguments: '',
                         );
                       },
