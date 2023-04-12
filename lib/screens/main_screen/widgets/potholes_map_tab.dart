@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../../../themes/theme_constants.dart';
 import 'location_search_bar.dart';
 import 'map_nav_input.dart';
 import 'navigate_button.dart';

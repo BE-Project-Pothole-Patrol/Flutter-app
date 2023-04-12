@@ -52,25 +52,22 @@ class _MapNavInputState extends State<MapNavInput> {
       width: widget.size.width,
       height: widget.size.height * 0.35,
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            color: Colors.white,
-            child: GestureDetector(
-              onTap: () {
-                widget.onPress(false);
-              },
-              child: const Align(
-                alignment: Alignment.topLeft,
-                child: Icon(
-                  Icons.west,
-                  size: 25,
-                  color: kBlackLight,
-                ),
+          GestureDetector(
+            onTap: () {
+              widget.onPress(false);
+            },
+            child: const Align(
+              alignment: Alignment.topLeft,
+              child: Icon(
+                Icons.west,
+                size: 25,
+                color: kBlackLight,
               ),
             ),
           ),
