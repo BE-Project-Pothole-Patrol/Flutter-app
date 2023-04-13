@@ -14,6 +14,7 @@ const kHintGrey = Color(0xFFA8A8A8);
 const kWhiteDark = Color(0xFFF5F5F5);
 const kWhiteDarker = Color(0xFFe6e6e6);
 const kDestinationMarkerRed = Color(0xFFDE5246);
+const kErrorRed = Color(0xFFcc0000);
 
 ThemeData lightTheme = ThemeData(
   dividerColor: kBorderGrey,

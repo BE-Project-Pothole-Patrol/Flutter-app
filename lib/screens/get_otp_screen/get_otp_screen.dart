@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import '../../models/error_model.dart';
 import '../../models/otp_model.dart';
+import '../../models/phone_code_model.dart';
 import '../../utils/constants.dart' as Constants;
 import '../../themes/theme_constants.dart';
 import 'widgets/user_input_for_otp.dart';
@@ -20,10 +21,6 @@ class GetOtpScreen extends StatelessWidget {
     final List<PhoneCodeModel> list = [
       PhoneCodeModel(
           id: 0, phoneCode: '+91', countryCode: 'in', countryName: 'India'),
-      PhoneCodeModel(
-          id: 1, phoneCode: '+1', countryCode: 'us', countryName: 'US'),
-      PhoneCodeModel(
-          id: 2, phoneCode: '+44', countryCode: 'gb-eng', countryName: 'UK'),
     ];
 
     Future<Otp> getOtp(int countryCode, int number) async {
@@ -88,7 +85,7 @@ class GetOtpScreen extends StatelessWidget {
                   child: UserInputForOtp(list: list),
                 ),
                 SizedBox(
-                  height: size.height * 0.035,
+                  height: size.height * 0.01,
                 ),
                 SizedBox(
                   width: size.width * 0.8,
@@ -97,6 +94,7 @@ class GetOtpScreen extends StatelessWidget {
                       getOtp(91, 9820696178).then((value) {
                         debugPrint(value.otp);
                       }).catchError((e) {
+                        debugPrint('error occured :(');
                         debugPrint(e);
                       });
                       // Navigator.of(context).pushNamed(
