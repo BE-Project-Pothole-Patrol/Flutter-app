@@ -39,7 +39,7 @@ class SplashScreen extends StatelessWidget {
                 height: size.height * 0.05,
               ),
               Text(
-                "PotNoHole",
+                "Pothole Patrol",
                 style: Theme.of(context).textTheme.displayLarge,
               )
             ],

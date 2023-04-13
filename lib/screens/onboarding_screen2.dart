@@ -35,7 +35,7 @@ class OnboardingScreen2 extends StatelessWidget {
               SizedBox(
                 width: size.width * 0.8,
                 child: Text(
-                  "Korem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim",
+                  "Navigate with confidence and avoid damage to your vehicle. Our app displays potholes on your route and gives you a heads up.",
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: kBlackLight.withOpacity(0.7),
                       ),
