@@ -1,10 +1,16 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import '../../models/error_model.dart';
+import '../../models/otp_model.dart';
+import '../../utils/constants.dart' as Constants;
 import '../../themes/theme_constants.dart';
 import 'widgets/user_input_for_otp.dart';
 
 class GetOtpScreen extends StatelessWidget {
-  const GetOtpScreen({super.key, this.title="Enter Your Mobile No."});
+  const GetOtpScreen({super.key, this.title = "Enter Your Mobile No."});
 
   final String title;
 
@@ -19,6 +25,28 @@ class GetOtpScreen extends StatelessWidget {
       PhoneCodeModel(
           id: 2, phoneCode: '+44', countryCode: 'gb-eng', countryName: 'UK'),
     ];
+
+    Future<Otp> getOtp(int countryCode, int number) async {
+      final res = await http.post(
+        Uri.parse("${Constants.localBaseUrl}generateOTP/"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(
+          <String, int>{
+            "country_code": countryCode,
+            "number": number,
+          },
+        ),
+      );
+
+      if (res.statusCode == 200) {
+        return Otp.fromJson(jsonDecode(res.body));
+      } else {
+        ErrorRes err = ErrorRes.fromJson(jsonDecode(res.body));
+        throw Exception(err.error);
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(),
@@ -66,10 +94,15 @@ class GetOtpScreen extends StatelessWidget {
                   width: size.width * 0.8,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed(
-                        '/verifyOtpScreen',
-                        arguments: '',
-                      );
+                      getOtp(91, 9820696178).then((value) {
+                        debugPrint(value.otp);
+                      }).catchError((e) {
+                        debugPrint(e);
+                      });
+                      // Navigator.of(context).pushNamed(
+                      //   '/verifyOtpScreen',
+                      //   arguments: '',
+                      // );
                     },
                     style:
                         Theme.of(context).elevatedButtonTheme.style?.copyWith(
