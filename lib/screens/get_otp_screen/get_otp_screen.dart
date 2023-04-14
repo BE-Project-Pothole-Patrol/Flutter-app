@@ -10,10 +10,27 @@ import '../../utils/constants.dart' as Constants;
 import '../../themes/theme_constants.dart';
 import 'widgets/user_input_for_otp.dart';
 
-class GetOtpScreen extends StatelessWidget {
+class GetOtpScreen extends StatefulWidget {
   const GetOtpScreen({super.key, this.title = "Enter Your Mobile No."});
 
   final String title;
+
+  @override
+  State<GetOtpScreen> createState() => _GetOtpScreenState();
+}
+
+class _GetOtpScreenState extends State<GetOtpScreen> {
+  bool _isEnabled = false;
+  bool _isError = false;
+  String _error = '';
+  String _userNumberVal = '';
+  String _userCodeVal = '+91';
+
+  @override
+  void initState() {
+    super.initState();
+    debugPrint('init get OTP screen');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +78,7 @@ class GetOtpScreen extends StatelessWidget {
                   height: size.height * 0.01,
                 ),
                 Text(
-                  title,
+                  widget.title,
                   style: Theme.of(context).textTheme.displayMedium,
                 ),
                 SizedBox(
@@ -82,7 +99,40 @@ class GetOtpScreen extends StatelessWidget {
                 ),
                 SizedBox(
                   width: size.width * 0.8,
-                  child: UserInputForOtp(list: list),
+                  child: UserInputForOtp(
+                    list: list,
+                    isError: _isError,
+                    error: _error,
+                    onTextChanged: (val) {
+                      debugPrint('number from the child widget: $val');
+
+                      if (val.isEmpty) {
+                        setState(() {
+                          _isError = true;
+                          _error = "Can't be empty!";
+                          _isEnabled = false;
+                        });
+                      } else if (val.length < 10) {
+                        setState(() {
+                          _isError = true;
+                          _error = "Number must be of 10 digits";
+                          _isEnabled = false;
+                        });
+                      } else {
+                        setState(() {
+                          _isError = false;
+                          _error = '';
+                          _isEnabled = true;
+                        });
+                      }
+
+                      _userNumberVal = val;
+                    },
+                    onSelectionChanged: (val) {
+                      debugPrint('code from the child widget: $val');
+                      _userCodeVal = val;
+                    },
+                  ),
                 ),
                 SizedBox(
                   height: size.height * 0.01,
@@ -90,18 +140,22 @@ class GetOtpScreen extends StatelessWidget {
                 SizedBox(
                   width: size.width * 0.8,
                   child: ElevatedButton(
-                    onPressed: () {
-                      getOtp(91, 9820696178).then((value) {
+                    onPressed: _isEnabled ? () {
+                      debugPrint(_userCodeVal);
+                      debugPrint(_userNumberVal);
+
+                      getOtp(int.parse(_userCodeVal.substring(1)),int.parse(_userNumberVal))
+                      .then((value) {
                         debugPrint(value.otp);
+                        Navigator.of(context).pushNamed(
+                        '/verifyOtpScreen',
+                        arguments: '',
+                      );
                       }).catchError((e) {
                         debugPrint('error occured :(');
                         debugPrint(e);
                       });
-                      // Navigator.of(context).pushNamed(
-                      //   '/verifyOtpScreen',
-                      //   arguments: '',
-                      // );
-                    },
+                    } : null,
                     style:
                         Theme.of(context).elevatedButtonTheme.style?.copyWith(
                               shape: MaterialStateProperty.all<OutlinedBorder>(

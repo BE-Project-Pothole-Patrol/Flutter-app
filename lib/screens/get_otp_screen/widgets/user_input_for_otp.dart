@@ -1,33 +1,25 @@
-import 'package:app/themes/theme_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
 import '../../../models/phone_code_model.dart';
+import '../../../themes/theme_constants.dart';
 
-class UserInputForOtp extends StatefulWidget {
+class UserInputForOtp extends StatelessWidget {
   const UserInputForOtp({
     super.key,
     required this.list,
+    required this.isError,
+    required this.error,
+    required this.onTextChanged,
+    required this.onSelectionChanged,
   });
 
   final List<PhoneCodeModel> list;
-
-  @override
-  State<UserInputForOtp> createState() => _UserInputForOtpState();
-}
-
-class _UserInputForOtpState extends State<UserInputForOtp> {
-  final _controller = TextEditingController();
-
-  bool _validate = false;
-  String _validationErr = '';
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  final bool isError;
+  final String error;
+  final Function(String) onTextChanged;
+  final Function(String) onSelectionChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -57,14 +49,15 @@ class _UserInputForOtpState extends State<UserInputForOtp> {
                 ),
                 onChanged: (value) {
                   debugPrint('Selected Value $value, code ${value?.phoneCode}');
+                  onSelectionChanged(value?.phoneCode ?? '91');
                 },
                 dropdownDecoratorProps: const DropDownDecoratorProps(
                   dropdownSearchDecoration: InputDecoration(),
                   textAlign: TextAlign.center,
                   textAlignVertical: TextAlignVertical.bottom,
                 ),
-                items: widget.list,
-                selectedItem: widget.list[0],
+                items: list,
+                selectedItem: list[0],
                 dropdownBuilder: (context, selectedItem) {
                   return Row(
                     children: [
@@ -92,31 +85,14 @@ class _UserInputForOtpState extends State<UserInputForOtp> {
               flex: 60,
               child: TextField(
                 onChanged: (value) {
-                  debugPrint(value);
-
-                  if (value.isEmpty) {
-                    setState(() {
-                      _validate = true;
-                      _validationErr = "Can't be empty!";
-                    });
-                  } else if (value.length < 10) {
-                    setState(() {
-                      _validate = true;
-                      _validationErr = "Number must be of 10 digits";
-                    });
-                  }else{
-                    setState(() {
-                      _validate = false;
-                      _validationErr = "";
-                    });
-                  }
+                  onTextChanged(value);
                 },
                 textAlignVertical: TextAlignVertical.bottom,
                 style: Theme.of(context).textTheme.bodyMedium,
                 maxLength: 10,
                 decoration: InputDecoration(
                   hintText: 'Enter Your No.',
-                  errorText: _validate ? '' : null,
+                  errorText: isError ? '' : null,
                   errorStyle: const TextStyle(
                     height: 0,
                   ),
@@ -138,7 +114,7 @@ class _UserInputForOtpState extends State<UserInputForOtp> {
           child: Align(
             alignment: Alignment.centerRight,
             child: Text(
-              _validationErr,
+              error,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: kErrorRed,
                     fontSize: 12,
@@ -146,7 +122,7 @@ class _UserInputForOtpState extends State<UserInputForOtp> {
                   ),
             ),
           ),
-        )
+        ),
       ],
     );
   }
