@@ -6,8 +6,11 @@ import 'package:http/http.dart' as http;
 import '../../models/error_model.dart';
 import '../../models/otp_model.dart';
 import '../../models/phone_code_model.dart';
+import '../../models/user_fields_model.dart';
+import '../../routing/args/verify_otp_screen_args.dart';
 import '../../utils/constants.dart' as Constants;
 import '../../themes/theme_constants.dart';
+import '../../utils/shared_prefs_util.dart';
 import 'widgets/user_input_for_otp.dart';
 
 class GetOtpScreen extends StatefulWidget {
@@ -35,6 +38,8 @@ class _GetOtpScreenState extends State<GetOtpScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final SharedPreferencesManager prefs = SharedPreferencesManager();
+    
     final List<PhoneCodeModel> list = [
       PhoneCodeModel(
           id: 0, phoneCode: '+91', countryCode: 'in', countryName: 'India'),
@@ -140,22 +145,25 @@ class _GetOtpScreenState extends State<GetOtpScreen> {
                 SizedBox(
                   width: size.width * 0.8,
                   child: ElevatedButton(
-                    onPressed: _isEnabled ? () {
-                      debugPrint(_userCodeVal);
-                      debugPrint(_userNumberVal);
-
-                      getOtp(int.parse(_userCodeVal.substring(1)),int.parse(_userNumberVal))
-                      .then((value) {
-                        debugPrint(value.otp);
-                        Navigator.of(context).pushNamed(
-                        '/verifyOtpScreen',
-                        arguments: '',
-                      );
-                      }).catchError((e) {
-                        debugPrint('error occured :(');
-                        debugPrint(e);
-                      });
-                    } : null,
+                    onPressed: _isEnabled
+                        ? () {
+                            debugPrint(_userCodeVal);
+                            debugPrint(_userNumberVal);
+                            int code=int.parse(_userCodeVal.substring(1));
+                            int number=int.parse(_userNumberVal);
+                            getOtp(code,number).then((value) {
+                              debugPrint(value.otp);
+                              prefs.saveCurrentUser(User(code: code,number: number));
+                                Navigator.of(context).pushNamed(
+                                '/verifyOtpScreen',
+                                arguments: VerifyOtpScreenArgs(number:number,code:code),
+                              );
+                            }).catchError((e) {
+                              debugPrint('error occured :(');
+                              debugPrint(e);
+                            });
+                          }
+                        : null,
                     style:
                         Theme.of(context).elevatedButtonTheme.style?.copyWith(
                               shape: MaterialStateProperty.all<OutlinedBorder>(

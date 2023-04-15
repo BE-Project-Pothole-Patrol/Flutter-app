@@ -123,7 +123,7 @@ class LoginScreen extends StatelessWidget {
                   child: PartialColoredText(normalText:"New User? ",semiBoldText: "Sign Up",color:kPrimaryColor,onTap: (){
                     Navigator.of(context).pushNamed(
                           '/generateOtpScreen',
-                          arguments: GetOtpScreenArgs(title: "Register Your Mobile No."),
+                          arguments: const GetOtpScreenArgs(title: "Register Your Mobile No."),
                         );
                   },),
                 ),

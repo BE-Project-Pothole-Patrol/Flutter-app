@@ -1,20 +1,52 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../themes/theme_constants.dart';
+import '../../models/error_model.dart';
+import '../../models/number_verified_model.dart';
 import '../../widgets/partial_colored_text.dart';
 import 'widgets/otp_text_field.dart';
+import '../../providers/otp_input_provider.dart';
+import '../../utils/constants.dart' as Constants;
 
 class VerifyOtpScreen extends StatelessWidget {
-  const VerifyOtpScreen({super.key});
+  const VerifyOtpScreen({super.key, required this.number, required this.code});
+  final int number;
+  final int code;
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
+    Future<Verified> verifyUser(int countryCode, int number, String otp) async {
+      final res = await http.post(
+        Uri.parse("${Constants.localBaseUrl}verifyOTP/"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(
+          <String, dynamic>{
+            "country_code": countryCode,
+            "number": number,
+            "otp": otp,
+          },
+        ),
+      );
+
+      if (res.statusCode == 200) {
+        debugPrint("Success!");
+        return Verified.fromJson(jsonDecode(res.body));
+      } else {
+        ErrorRes err = ErrorRes.fromJson(jsonDecode(res.body));
+        throw Exception(err.error);
+      }
+    }
+
     return Scaffold(
-      appBar: AppBar(
-        
-      ),
+      appBar: AppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
@@ -38,10 +70,11 @@ class VerifyOtpScreen extends StatelessWidget {
                 SizedBox(
                   width: size.width * 0.8,
                   child: PartialColoredText(
-                      normalText: "Enter OTP sent to ",
-                      semiBoldText: "+91 9820485183",
-                      color: Colors.black,
-                      onTap: (){},),
+                    normalText: "Enter OTP sent to ",
+                    semiBoldText: "+$code $number",
+                    color: Colors.black,
+                    onTap: () {},
+                  ),
                 ),
                 SizedBox(
                   height: size.height * 0.01,
@@ -56,12 +89,25 @@ class VerifyOtpScreen extends StatelessWidget {
                 SizedBox(
                   width: size.width * 0.8,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(
-                        '/registerScreen',
-                        arguments: '',
-                      );
-                    },
+                    onPressed: context.watch<OtpInputProvider>().isValid
+                        ? () {
+                            String otp = context.read<OtpInputProvider>().otp;
+                            debugPrint(otp);
+
+                            verifyUser(code, number, otp).then((value) {
+                              debugPrint(value.success);
+
+                              Navigator.of(context).pushNamed(
+                              '/registerScreen',
+                              arguments: '',
+                            );
+                            
+                            }).catchError((e) {
+                              debugPrint('error occured :(');
+                              debugPrint(e);
+                            });
+                          }
+                        : null,
                     style:
                         Theme.of(context).elevatedButtonTheme.style?.copyWith(
                               shape: MaterialStateProperty.all<OutlinedBorder>(
@@ -79,10 +125,11 @@ class VerifyOtpScreen extends StatelessWidget {
                 SizedBox(
                   width: size.width * 0.8,
                   child: PartialColoredText(
-                      normalText: "Didn't Receive OTP? ",
-                      semiBoldText: "Resend OTP",
-                      color: kPrimaryColor,
-                      onTap: (){},),
+                    normalText: "Didn't Receive OTP? ",
+                    semiBoldText: "Resend OTP",
+                    color: kPrimaryColor,
+                    onTap: () {},
+                  ),
                 ),
               ],
             ),

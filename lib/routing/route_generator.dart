@@ -9,10 +9,10 @@ import '../screens/register_screen/register_screen.dart';
 import '../screens/splash_screen.dart';
 import '../screens/verify_otp_screen/verify_otp_screen.dart';
 import 'args/get_otp_screen_args.dart';
+import 'args/verify_otp_screen_args.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
-
     switch (settings.name) {
       case '/splashScreen':
         return MaterialPageRoute(builder: (_) => const SplashScreen());
@@ -28,7 +28,13 @@ class RouteGenerator {
           );
         });
       case '/verifyOtpScreen':
-        return MaterialPageRoute(builder: (_) => const VerifyOtpScreen());
+        return MaterialPageRoute(builder: (_) {
+          VerifyOtpScreenArgs args = settings.arguments as VerifyOtpScreenArgs;
+          return VerifyOtpScreen(
+            number:args.number,
+            code:args.code,
+          );
+        });
       case '/registerScreen':
         return MaterialPageRoute(builder: (_) => const RegisterScreen());
       case '/loginScreen':

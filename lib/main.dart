@@ -1,6 +1,8 @@
+import 'package:app/providers/otp_input_provider.dart';
 import 'package:app/screens/register_screen/register_screen.dart';
 import 'package:app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'routing/route_generator.dart';
 import 'screens/login_screen/login_screen.dart';
 import 'screens/main_screen/main_screen.dart';
@@ -12,7 +14,11 @@ import 'screens/get_otp_screen/get_otp_screen.dart';
 import 'screens/verify_otp_screen/verify_otp_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(providers: [
+      ChangeNotifierProvider(create: (_) => OtpInputProvider()),
+    ], child: const MyApp()),
+  );
 }
 
 ThemeManager _themeManager = ThemeManager();
