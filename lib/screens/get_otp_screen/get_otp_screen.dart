@@ -11,6 +11,7 @@ import '../../routing/args/verify_otp_screen_args.dart';
 import '../../utils/constants.dart' as Constants;
 import '../../themes/theme_constants.dart';
 import '../../utils/shared_prefs_util.dart';
+import '../../widgets/linear_progress_indicator_with_text.dart';
 import 'widgets/user_input_for_otp.dart';
 
 class GetOtpScreen extends StatefulWidget {
@@ -23,6 +24,7 @@ class GetOtpScreen extends StatefulWidget {
 }
 
 class _GetOtpScreenState extends State<GetOtpScreen> {
+  bool _isLoading = false;
   bool _isEnabled = false;
   bool _isError = false;
   String _error = '';
@@ -39,7 +41,7 @@ class _GetOtpScreenState extends State<GetOtpScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final SharedPreferencesManager prefs = SharedPreferencesManager();
-    
+
     final List<PhoneCodeModel> list = [
       PhoneCodeModel(
           id: 0, phoneCode: '+91', countryCode: 'in', countryName: 'India'),
@@ -68,115 +70,130 @@ class _GetOtpScreenState extends State<GetOtpScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: !_isLoading ? AppBar() : null,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
-            child: Column(
-              children: [
-                Image.asset(
-                  'assets/images/getotp.jpg',
-                  width: size.width * 0.8,
-                  height: size.width * 0.8,
-                ),
-                SizedBox(
-                  height: size.height * 0.01,
-                ),
-                Text(
-                  widget.title,
-                  style: Theme.of(context).textTheme.displayMedium,
-                ),
-                SizedBox(
-                  height: size.height * 0.01,
-                ),
-                SizedBox(
-                  width: size.width * 0.8,
-                  child: Text(
-                    "We will send you an OTP (One Time Password) on your number",
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: kBlackLight.withOpacity(0.7),
+            child: !_isLoading
+                ? Column(
+                    children: [
+                      Image.asset(
+                        'assets/images/getotp.jpg',
+                        width: size.width * 0.8,
+                        height: size.width * 0.8,
+                      ),
+                      SizedBox(
+                        height: size.height * 0.01,
+                      ),
+                      Text(
+                        widget.title,
+                        style: Theme.of(context).textTheme.displayMedium,
+                      ),
+                      SizedBox(
+                        height: size.height * 0.01,
+                      ),
+                      SizedBox(
+                        width: size.width * 0.8,
+                        child: Text(
+                          "We will send you an OTP (One Time Password) on your number",
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: kBlackLight.withOpacity(0.7),
+                                  ),
+                          textAlign: TextAlign.center,
                         ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                SizedBox(
-                  height: size.height * 0.01,
-                ),
-                SizedBox(
-                  width: size.width * 0.8,
-                  child: UserInputForOtp(
-                    list: list,
-                    isError: _isError,
-                    error: _error,
-                    onTextChanged: (val) {
-                      debugPrint('number from the child widget: $val');
+                      ),
+                      SizedBox(
+                        height: size.height * 0.01,
+                      ),
+                      SizedBox(
+                        width: size.width * 0.8,
+                        child: UserInputForOtp(
+                          list: list,
+                          isError: _isError,
+                          error: _error,
+                          onTextChanged: (val) {
+                            debugPrint('number from the child widget: $val');
 
-                      if (val.isEmpty) {
-                        setState(() {
-                          _isError = true;
-                          _error = "Can't be empty!";
-                          _isEnabled = false;
-                        });
-                      } else if (val.length < 10) {
-                        setState(() {
-                          _isError = true;
-                          _error = "Number must be of 10 digits";
-                          _isEnabled = false;
-                        });
-                      } else {
-                        setState(() {
-                          _isError = false;
-                          _error = '';
-                          _isEnabled = true;
-                        });
-                      }
+                            if (val.isEmpty) {
+                              setState(() {
+                                _isError = true;
+                                _error = "Can't be empty!";
+                                _isEnabled = false;
+                              });
+                            } else if (val.length < 10) {
+                              setState(() {
+                                _isError = true;
+                                _error = "Number must be of 10 digits";
+                                _isEnabled = false;
+                              });
+                            } else {
+                              setState(() {
+                                _isError = false;
+                                _error = '';
+                                _isEnabled = true;
+                              });
+                            }
 
-                      _userNumberVal = val;
-                    },
-                    onSelectionChanged: (val) {
-                      debugPrint('code from the child widget: $val');
-                      _userCodeVal = val;
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: size.height * 0.01,
-                ),
-                SizedBox(
-                  width: size.width * 0.8,
-                  child: ElevatedButton(
-                    onPressed: _isEnabled
-                        ? () {
-                            debugPrint(_userCodeVal);
-                            debugPrint(_userNumberVal);
-                            int code=int.parse(_userCodeVal.substring(1));
-                            int number=int.parse(_userNumberVal);
-                            getOtp(code,number).then((value) {
-                              debugPrint(value.otp);
-                              prefs.saveCurrentUser(User(code: code,number: number));
-                                Navigator.of(context).pushNamed(
-                                '/verifyOtpScreen',
-                                arguments: VerifyOtpScreenArgs(number:number,code:code),
-                              );
-                            }).catchError((e) {
-                              debugPrint('error occured :(');
-                              debugPrint(e);
-                            });
-                          }
-                        : null,
-                    style:
-                        Theme.of(context).elevatedButtonTheme.style?.copyWith(
-                              shape: MaterialStateProperty.all<OutlinedBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18),
+                            _userNumberVal = val;
+                          },
+                          onSelectionChanged: (val) {
+                            debugPrint('code from the child widget: $val');
+                            _userCodeVal = val;
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: size.height * 0.01,
+                      ),
+                      SizedBox(
+                        width: size.width * 0.8,
+                        child: ElevatedButton(
+                          onPressed: _isEnabled
+                              ? () {
+                                  debugPrint(_userCodeVal);
+                                  debugPrint(_userNumberVal);
+                                  int code =
+                                      int.parse(_userCodeVal.substring(1));
+                                  int number = int.parse(_userNumberVal);
+                                  setState(() {_isLoading = true;});
+                                  getOtp(code, number).then((value) {
+                                    debugPrint(value.otp);
+                                    prefs.saveCurrentUser(User(code: code, number: number));
+                                    Navigator.of(context).pushNamed(
+                                      '/verifyOtpScreen',
+                                      arguments: VerifyOtpScreenArgs(number: number, code: code),
+                                    );
+                                    setState(() {_isLoading = false;});
+                                  }).catchError((e) {
+                                    setState(() {_isLoading = false;});
+                                    debugPrint('error occured :(');
+                                    debugPrint(e);
+                                  });
+                                }
+                              : null,
+                          style: Theme.of(context)
+                              .elevatedButtonTheme
+                              .style
+                              ?.copyWith(
+                                shape:
+                                    MaterialStateProperty.all<OutlinedBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
                                 ),
                               ),
-                            ),
-                    child: const Text('Get OTP'),
+                          child: const Text('Get OTP'),
+                        ),
+                      ),
+                    ],
+                  )
+                : Container(
+                    margin: EdgeInsets.only(top: size.height * 0.45),
+                    width: size.width * 0.8,
+                    child: const LinearProgressIndicatorWithText(
+                        text: "Fetching Your OTP..."),
                   ),
-                ),
-              ],
-            ),
           ),
         ),
       ),
