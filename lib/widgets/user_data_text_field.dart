@@ -20,37 +20,51 @@ class UserDataTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: width,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Icon(
-            icName,
-            size: 32,
-            color: kIconGrey,
-          ),
-          SizedBox(
-            width: spacing,
-          ),
-          Expanded(
-            child: TextField(
-              textAlignVertical: TextAlignVertical.top,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(fontWeight: FontWeight.w500, fontSize: 20),
-              decoration: InputDecoration(
-                hintText: hint,
-                hintStyle: Theme.of(context)
-                    .inputDecorationTheme
-                    .hintStyle
-                    ?.copyWith(fontSize: 20),
-                isDense: true,
-                contentPadding: const EdgeInsets.symmetric(vertical: 5),
-                floatingLabelBehavior: FloatingLabelBehavior.never,
+      child: Column(
+        children:[ Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Icon(
+              icName,
+              size: 30,
+              color: kIconGrey,
+            ),
+            SizedBox(
+              width: spacing,
+            ),
+            Expanded(
+              child: TextField(
+                textAlignVertical: TextAlignVertical.top,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500, fontSize: 18),
+                decoration: InputDecoration(
+                  hintText: hint,
+                  hintStyle: Theme.of(context).inputDecorationTheme.hintStyle?.copyWith(fontSize: 18),
+                  errorText: null,
+                  errorStyle: const TextStyle(
+                    height: 0,
+                  ),
+                  isDense: true,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 2),
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                ),
               ),
             ),
+          ],
+        ),
+         SizedBox(
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              "",
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: kErrorRed,
+                    fontSize: 12,
+                    fontWeight: FontWeight.normal,
+                  ),
+            ),
           ),
-        ],
+        ),
+      ],
       ),
     );
   }

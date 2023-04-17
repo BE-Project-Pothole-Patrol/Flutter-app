@@ -39,6 +39,7 @@ class _GetOtpScreenState extends State<GetOtpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("in get opt screen build()");
     Size size = MediaQuery.of(context).size;
     final SharedPreferencesManager prefs = SharedPreferencesManager();
 
@@ -156,17 +157,25 @@ class _GetOtpScreenState extends State<GetOtpScreen> {
                                   int code =
                                       int.parse(_userCodeVal.substring(1));
                                   int number = int.parse(_userNumberVal);
-                                  setState(() {_isLoading = true;});
+                                  setState(() {
+                                    _isLoading = true;
+                                  });
                                   getOtp(code, number).then((value) {
                                     debugPrint(value.otp);
-                                    prefs.saveCurrentUser(User(code: code, number: number));
+                                    prefs.saveCurrentUser(
+                                        User(code: code, number: number));
                                     Navigator.of(context).pushNamed(
                                       '/verifyOtpScreen',
-                                      arguments: VerifyOtpScreenArgs(number: number, code: code),
+                                      arguments: VerifyOtpScreenArgs(
+                                          number: number, code: code),
                                     );
-                                    setState(() {_isLoading = false;});
+                                    setState(() {
+                                      _isLoading = false;
+                                    });
                                   }).catchError((e) {
-                                    setState(() {_isLoading = false;});
+                                    setState(() {
+                                      _isLoading = false;
+                                    });
                                     debugPrint('error occured :(');
                                     debugPrint(e);
                                   });

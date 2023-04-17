@@ -21,9 +21,6 @@ class RegisterScreen extends StatelessWidget {
           child: Center(
             child: Column(
               children: [
-                SizedBox(
-                  height: size.height * 0.02,
-                ),
                 Text(
                   "Sign Up",
                   style: Theme.of(context).textTheme.displayMedium,
@@ -39,7 +36,7 @@ class RegisterScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(
-                  height: size.height * 0.03,
+                  height: size.height * 0.02,
                 ),
                 UserDataTextField(
                   icName: Icons.person_2_outlined,
@@ -48,7 +45,7 @@ class RegisterScreen extends StatelessWidget {
                   spacing: size.width * 0.02,
                 ),
                 SizedBox(
-                  height: size.height * 0.01,
+                  height: size.height * 0.0,
                 ),
                 UserDataTextField(
                   icName: Icons.person_2_outlined,
@@ -57,7 +54,7 @@ class RegisterScreen extends StatelessWidget {
                   spacing: size.width * 0.02,
                 ),
                 SizedBox(
-                  height: size.height * 0.01,
+                  height: size.height * 0.0,
                 ),
                 UserDataTextField(
                   icName: Icons.account_circle_outlined,
@@ -66,7 +63,7 @@ class RegisterScreen extends StatelessWidget {
                   spacing: size.width * 0.02,
                 ),
                 SizedBox(
-                  height: size.height * 0.01,
+                  height: size.height * 0.0,
                 ),
                 UserDataTextField(
                   icName: Icons.email_outlined,
@@ -75,7 +72,7 @@ class RegisterScreen extends StatelessWidget {
                   spacing: size.width * 0.02,
                 ),
                 SizedBox(
-                  height: size.height * 0.01,
+                  height: size.height * 0.0,
                 ),
                 UserDataTextField(
                   icName: Icons.vpn_key_outlined,
@@ -84,7 +81,7 @@ class RegisterScreen extends StatelessWidget {
                   spacing: size.width * 0.02,
                 ),
                 SizedBox(
-                  height: size.height * 0.01,
+                  height: size.height * 0.0,
                 ),
                 UserDataTextField(
                   icName: Icons.vpn_key_outlined,
@@ -93,7 +90,7 @@ class RegisterScreen extends StatelessWidget {
                   spacing: size.width * 0.02,
                 ),
                 SizedBox(
-                  height: size.height * 0.06,
+                  height: size.height * 0.03,
                 ),
                 SizedBox(
                   width: size.width * 0.8,
@@ -117,14 +114,14 @@ class RegisterScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: size.height * 0.03,
+                  height: size.height * 0.01,
                 ),
                 SizedBox(
                   width: size.width * 0.8,
                   child: ChoiceDivider(size: size),
                 ),
                 SizedBox(
-                  height: size.height * 0.03,
+                  height: size.height * 0.01,
                 ),
                 SizedBox(
                   width: size.width * 0.8,
