@@ -54,6 +54,9 @@ class LoginScreen extends StatelessWidget {
                   hint: "First Name",
                   width: size.width * 0.8,
                   spacing: size.width * 0.02,
+                  isValid: false,
+                  errorText: '',
+                  onEdit: (val){},
                 ),
                 SizedBox(
                   height: size.height * 0.01,
@@ -63,6 +66,9 @@ class LoginScreen extends StatelessWidget {
                   hint: "Password",
                   width: size.width * 0.8,
                   spacing: size.width * 0.02,
+                   isValid: false,
+                  errorText: '',
+                  onEdit: (val){}
                 ),
                 SizedBox(
                   height: size.height * 0.03,

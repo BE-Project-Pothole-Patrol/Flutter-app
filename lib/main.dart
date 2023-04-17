@@ -1,4 +1,5 @@
 import 'package:app/providers/otp_input_provider.dart';
+import 'package:app/providers/user_data_provider.dart';
 import 'package:app/screens/register_screen/register_screen.dart';
 import 'package:app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ void main() {
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider(create: (_) => OtpInputProvider()),
+      ChangeNotifierProvider(create: (_) => UserDataProvider()),
     ], child: const MyApp()),
   );
 }

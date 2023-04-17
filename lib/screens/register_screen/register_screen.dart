@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../widgets/choice_divider.dart';
 import '../../widgets/custom_text_button.dart';
 import '../../widgets/user_data_text_field.dart';
 import '../../themes/theme_constants.dart';
+import '../../providers/user_data_provider.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -13,9 +15,7 @@ class RegisterScreen extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(
-        
-      ),
+      appBar: AppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
@@ -43,6 +43,9 @@ class RegisterScreen extends StatelessWidget {
                   hint: "First Name",
                   width: size.width * 0.8,
                   spacing: size.width * 0.02,
+                  isValid: context.watch<UserDataProvider>().isFirstNameValid,
+                  errorText: "Can't be Empty!",
+                  onEdit: context.read<UserDataProvider>().updateFirstName,
                 ),
                 SizedBox(
                   height: size.height * 0.0,
@@ -52,6 +55,9 @@ class RegisterScreen extends StatelessWidget {
                   hint: "Last Name",
                   width: size.width * 0.8,
                   spacing: size.width * 0.02,
+                  isValid: context.watch<UserDataProvider>().isLastNameValid,
+                  errorText: "Can't be empty!",
+                  onEdit: context.read<UserDataProvider>().updateLastName,
                 ),
                 SizedBox(
                   height: size.height * 0.0,
@@ -61,6 +67,9 @@ class RegisterScreen extends StatelessWidget {
                   hint: "Username",
                   width: size.width * 0.8,
                   spacing: size.width * 0.02,
+                  isValid: context.watch<UserDataProvider>().isUsernameValid,
+                  errorText: "Must be at least 5 characters!",
+                  onEdit: context.read<UserDataProvider>().updateUsername,
                 ),
                 SizedBox(
                   height: size.height * 0.0,
@@ -70,6 +79,9 @@ class RegisterScreen extends StatelessWidget {
                   hint: "Email",
                   width: size.width * 0.8,
                   spacing: size.width * 0.02,
+                  isValid: context.watch<UserDataProvider>().isEmailValid,
+                  errorText: "Invalid Email!",
+                  onEdit: context.read<UserDataProvider>().updateEmail,
                 ),
                 SizedBox(
                   height: size.height * 0.0,
@@ -79,6 +91,9 @@ class RegisterScreen extends StatelessWidget {
                   hint: "Password",
                   width: size.width * 0.8,
                   spacing: size.width * 0.02,
+                  isValid: context.watch<UserDataProvider>().isPasswordValid,
+                  errorText: "Enter a Strong Password!",
+                  onEdit: context.read<UserDataProvider>().updatePassword,
                 ),
                 SizedBox(
                   height: size.height * 0.0,
@@ -88,6 +103,11 @@ class RegisterScreen extends StatelessWidget {
                   hint: "Confirm Password",
                   width: size.width * 0.8,
                   spacing: size.width * 0.02,
+                  isValid:
+                      context.watch<UserDataProvider>().isConfirmPasswordValid,
+                  errorText: "Password is Invalid / Doesn't Match",
+                  onEdit:
+                      context.read<UserDataProvider>().updateConfirmPassword,
                 ),
                 SizedBox(
                   height: size.height * 0.03,
@@ -96,12 +116,16 @@ class RegisterScreen extends StatelessWidget {
                   width: size.width * 0.8,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(
-                          '/mainScreen',
-                          arguments: '',
-                        );
-                    },
+                    onPressed: context.watch<UserDataProvider>().isValid
+                        ? () {
+                            debugPrint(
+                                context.read<UserDataProvider>().firstName);
+                            // Navigator.of(context).pushNamed(
+                            //     '/mainScreen',
+                            //     arguments: '',
+                            //   );
+                          }
+                        : null,
                     style:
                         Theme.of(context).elevatedButtonTheme.style?.copyWith(
                               shape: MaterialStateProperty.all<OutlinedBorder>(
@@ -126,7 +150,10 @@ class RegisterScreen extends StatelessWidget {
                 SizedBox(
                   width: size.width * 0.8,
                   height: 50,
-                  child: CustomTextButton(size: size, text: "Sign Up with Google",),
+                  child: CustomTextButton(
+                    size: size,
+                    text: "Sign Up with Google",
+                  ),
                 ),
                 SizedBox(
                   height: size.height * 0.02,
