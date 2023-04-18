@@ -6,11 +6,9 @@ import 'package:http/http.dart' as http;
 import '../../models/error_model.dart';
 import '../../models/otp_model.dart';
 import '../../models/phone_code_model.dart';
-import '../../models/user_fields_model.dart';
 import '../../routing/args/verify_otp_screen_args.dart';
 import '../../utils/constants.dart' as Constants;
 import '../../themes/theme_constants.dart';
-import '../../utils/shared_prefs_util.dart';
 import '../../widgets/linear_progress_indicator_with_text.dart';
 import 'widgets/user_input_for_otp.dart';
 
@@ -41,7 +39,6 @@ class _GetOtpScreenState extends State<GetOtpScreen> {
   Widget build(BuildContext context) {
     debugPrint("in get opt screen build()");
     Size size = MediaQuery.of(context).size;
-    final SharedPreferencesManager prefs = SharedPreferencesManager();
 
     final List<PhoneCodeModel> list = [
       PhoneCodeModel(
@@ -162,8 +159,6 @@ class _GetOtpScreenState extends State<GetOtpScreen> {
                                   });
                                   getOtp(code, number).then((value) {
                                     debugPrint(value.otp);
-                                    prefs.saveCurrentUser(
-                                        User(code: code, number: number));
                                     Navigator.of(context).pushNamed(
                                       '/verifyOtpScreen',
                                       arguments: VerifyOtpScreenArgs(

@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: _themeManager.themeMode,
-      initialRoute: '/registerScreen',
+      initialRoute: '/splashScreen',
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }

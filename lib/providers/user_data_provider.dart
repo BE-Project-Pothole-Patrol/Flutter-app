@@ -88,4 +88,14 @@ class UserDataProvider extends ChangeNotifier {
     _isValid = checkValidity();
     notifyListeners();
   }
+  
+  Map<String, String> getUserData() {
+    return {
+      'firstName': _firstName,
+      'lastName': _lastName,
+      'username': _username,
+      'email': _email,
+      'password': _password,
+    };
+  }
 }
