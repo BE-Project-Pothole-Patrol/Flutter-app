@@ -6,6 +6,7 @@ import '../../widgets/choice_divider.dart';
 import '../../widgets/custom_text_button.dart';
 import '../../widgets/user_data_text_field.dart';
 import '../../widgets/partial_colored_text.dart';
+import '../../utils/shared_prefs_util.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -13,6 +14,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final SharedPreferencesManager prefs = SharedPreferencesManager();
 
     return Scaffold(
       body: SafeArea(
@@ -56,25 +58,24 @@ class LoginScreen extends StatelessWidget {
                   spacing: size.width * 0.02,
                   isValid: false,
                   errorText: '',
-                  onEdit: (val){},
+                  onEdit: (val) {},
                 ),
                 SizedBox(
                   height: size.height * 0.01,
                 ),
                 UserDataTextField(
-                  icName: Icons.vpn_key_outlined,
-                  hint: "Password",
-                  width: size.width * 0.8,
-                  spacing: size.width * 0.02,
-                   isValid: false,
-                  errorText: '',
-                  onEdit: (val){}
-                ),
+                    icName: Icons.vpn_key_outlined,
+                    hint: "Password",
+                    width: size.width * 0.8,
+                    spacing: size.width * 0.02,
+                    isValid: false,
+                    errorText: '',
+                    onEdit: (val) {}),
                 SizedBox(
                   height: size.height * 0.03,
                 ),
                 SizedBox(
-                  width: size.width*0.8,
+                  width: size.width * 0.8,
                   child: Text(
                     "Forgot Password?",
                     textAlign: TextAlign.right,
@@ -91,9 +92,9 @@ class LoginScreen extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pushNamed(
-                          '/mainScreen',
-                          arguments: '',
-                        );
+                        '/mainScreen',
+                        arguments: '',
+                      );
                     },
                     style:
                         Theme.of(context).elevatedButtonTheme.style?.copyWith(
@@ -119,19 +120,28 @@ class LoginScreen extends StatelessWidget {
                 SizedBox(
                   width: size.width * 0.8,
                   height: 50,
-                  child: CustomTextButton(size: size, text: "Sign In with Google",),
+                  child: CustomTextButton(
+                    size: size,
+                    text: "Sign In with Google",
+                  ),
                 ),
                 SizedBox(
                   height: size.height * 0.02,
                 ),
                 SizedBox(
                   width: size.width * 0.8,
-                  child: PartialColoredText(normalText:"New User? ",semiBoldText: "Sign Up",color:kPrimaryColor,onTap: (){
-                    Navigator.of(context).pushNamed(
-                          '/generateOtpScreen',
-                          arguments: const GetOtpScreenArgs(title: "Register Your Mobile No."),
-                        );
-                  },),
+                  child: PartialColoredText(
+                    normalText: "New User? ",
+                    semiBoldText: "Sign Up",
+                    color: kPrimaryColor,
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        '/generateOtpScreen',
+                        arguments: const GetOtpScreenArgs(
+                            title: "Register Your Mobile No."),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

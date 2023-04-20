@@ -181,14 +181,11 @@ class RegisterScreen extends StatelessWidget {
                                 lastName: userData["lastName"] ?? '',
                                 email: userData["email"] ?? '',
                               ));
+                              Navigator.pushNamedAndRemoveUntil(context, '/loginScreen', (route) => false);
                             }).catchError((error) {
                               debugPrint('error occured :(');
                               debugPrint(error.toString());
                             });
-                            // Navigator.of(context).pushNamed(
-                            //     '/mainScreen',
-                            //     arguments: '',
-                            //   );
                           }
                         : null,
                     style:
