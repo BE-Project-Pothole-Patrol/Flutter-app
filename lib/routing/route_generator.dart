@@ -9,6 +9,7 @@ import '../screens/register_screen/register_screen.dart';
 import '../screens/splash_screen.dart';
 import '../screens/verify_otp_screen/verify_otp_screen.dart';
 import 'args/get_otp_screen_args.dart';
+import 'args/login_screen_args.dart';
 import 'args/register_screen_args.dart';
 import 'args/verify_otp_screen_args.dart';
 
@@ -45,7 +46,14 @@ class RouteGenerator {
           );
         });
       case '/loginScreen':
-        return MaterialPageRoute(builder: (_) => const LoginScreen());
+        return MaterialPageRoute(builder: (_) {
+          LoginScreenArgs args = settings.arguments as LoginScreenArgs;
+          return LoginScreen(
+            firstName: args.firstName,
+            username: args.username,
+            password: args.password,
+          );
+        });
       case '/mainScreen':
         return MaterialPageRoute(builder: (_) => const MainScreen());
       default:

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../routing/args/login_screen_args.dart';
 import '../utils/shared_prefs_util.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -14,7 +15,7 @@ class SplashScreen extends StatelessWidget {
     Timer(const Duration(seconds: 2,), () {
         prefs.isOnboardingCompleted().then((val) {
           if (val) {
-            Navigator.of(context).pushReplacementNamed('/loginScreen',arguments: '',);
+            Navigator.of(context).pushReplacementNamed('/loginScreen',arguments: const LoginScreenArgs(),);
           } else {
             Navigator.of(context).pushReplacementNamed('/onboardingScreen1',arguments: '',);
           }

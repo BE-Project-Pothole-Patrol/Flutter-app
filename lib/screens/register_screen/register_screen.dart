@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../../models/error_model.dart';
 import '../../models/user_created_model.dart';
 import '../../models/user_fields_model.dart';
+import '../../routing/args/login_screen_args.dart';
 import '../../utils/shared_prefs_util.dart';
 import '../../widgets/choice_divider.dart';
 import '../../widgets/custom_text_button.dart';
@@ -169,10 +171,10 @@ class RegisterScreen extends StatelessWidget {
                                 context.read<UserDataProvider>().getUserData();
                             debugPrint("$userData");
                             debugPrint("$code $number");
-                            
+
                             registerUser(userData, code, number).then((value) {
                               debugPrint(value.success);
-                              
+
                               prefs.saveCurrentUser(User(
                                 code: code,
                                 number: number,
@@ -181,7 +183,16 @@ class RegisterScreen extends StatelessWidget {
                                 lastName: userData["lastName"] ?? '',
                                 email: userData["email"] ?? '',
                               ));
-                              Navigator.pushNamedAndRemoveUntil(context, '/loginScreen', (route) => false);
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                '/loginScreen',
+                                (route) => false,
+                                arguments: LoginScreenArgs(
+                                  firstName: userData["firstName"] ?? '',
+                                  username: userData["username"] ?? '',
+                                  password: userData["password"] ?? '',
+                                ),
+                              );
                             }).catchError((error) {
                               debugPrint('error occured :(');
                               debugPrint(error.toString());

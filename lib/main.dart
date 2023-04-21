@@ -4,6 +4,7 @@ import 'package:app/screens/register_screen/register_screen.dart';
 import 'package:app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'providers/login_provider.dart';
 import 'routing/route_generator.dart';
 import 'screens/login_screen/login_screen.dart';
 import 'screens/main_screen/main_screen.dart';
@@ -19,7 +20,9 @@ void main() {
     MultiProvider(providers: [
       ChangeNotifierProvider(create: (_) => OtpInputProvider()),
       ChangeNotifierProvider(create: (_) => UserDataProvider()),
-    ], child: const MyApp()),
+      ChangeNotifierProvider(create: (_) => LoginProvider()),
+    ], 
+    child: const MyApp()),
   );
 }
 
