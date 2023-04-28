@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
 import '../../models/login_fail_model.dart';
-import '../../models/login_model.dart';
+import '../../models/jwt_token_model.dart';
 import '../../providers/login_provider.dart';
 import '../../routing/args/get_otp_screen_args.dart';
 import '../../themes/theme_constants.dart';
@@ -29,7 +29,7 @@ class LoginScreen extends StatelessWidget {
   final String username;
   final String password;
 
-  Future<LoginModel> loginUser(String username, String password) async {
+  Future<JwtTokenModel> loginUser(String username, String password) async {
     final res = await http.post(
       Uri.parse("${Constants.localBaseUrl}token/"),
       headers: <String, String>{
@@ -46,7 +46,7 @@ class LoginScreen extends StatelessWidget {
     if (res.statusCode == 200) {
       debugPrint("Successfully logged in!");
       debugPrint(res.body);
-      return LoginModel.fromJson(jsonDecode(res.body));
+      return JwtTokenModel.fromJson(jsonDecode(res.body));
     } else {
       LoginErrorModel err = LoginErrorModel.fromJson(jsonDecode(res.body));
       throw Exception(err.detail);
@@ -147,7 +147,7 @@ class LoginScreen extends StatelessWidget {
                               SecureStorageUtil.saveCurrentAccessToken(value.access);
                               SecureStorageUtil.saveCurrentRefreshToken(value.refresh);
 
-                              Navigator.of(context).pushNamed('/mainScreen',arguments: '',);
+                              Navigator.of(context).pushReplacementNamed('/mainScreen',arguments: '',);
                             }).catchError((e) {
                               debugPrint('Some Error Occured:');
                               debugPrint(e.toString());

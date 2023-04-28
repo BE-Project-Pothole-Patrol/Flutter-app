@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../routing/args/login_screen_args.dart';
 import '../themes/theme_constants.dart';
 import '../utils/shared_prefs_util.dart';
 
@@ -53,7 +54,7 @@ class OnboardingScreen2 extends StatelessWidget {
                         prefs.setOnboardingCompleted(true);
                         Navigator.of(context).pushReplacementNamed(
                           '/loginScreen',
-                          arguments: '',
+                          arguments: const LoginScreenArgs(),
                         );
                       },
                       child: const Text('Next'),
