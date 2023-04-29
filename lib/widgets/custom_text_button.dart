@@ -9,17 +9,23 @@ class CustomTextButton extends StatelessWidget {
     required this.text,
     this.prefImagePath = "assets/images/googlelogo.png",
     this.hidePrefImage = false,
+    this.isEnabled = true,
+    required this.onTap,
   });
 
   final Size size;
   final String text;
   final String prefImagePath;
   final bool hidePrefImage;
+  final bool isEnabled;
+  final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () {},
+      onPressed: !isEnabled ? null : () {
+        onTap();
+      },
       style: Theme.of(context).textButtonTheme.style?.copyWith(
             shape: MaterialStateProperty.all<OutlinedBorder>(
               RoundedRectangleBorder(

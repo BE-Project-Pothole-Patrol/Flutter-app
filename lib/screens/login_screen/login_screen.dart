@@ -181,6 +181,7 @@ class LoginScreen extends StatelessWidget {
                   child: CustomTextButton(
                     size: size,
                     text: "Sign In with Google",
+                    onTap: (){},
                   ),
                 ),
                 SizedBox(

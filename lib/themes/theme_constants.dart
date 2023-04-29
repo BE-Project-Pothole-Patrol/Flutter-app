@@ -112,7 +112,7 @@ TextButtonThemeData _getTextButtonTheme({
         if (states.contains(MaterialState.pressed)) {
           return darkColor;
         } else if (states.contains(MaterialState.disabled)) {
-          return lightColor.withOpacity(0.7);
+          return lightColor.withOpacity(0.5);
         } else if (states.contains(MaterialState.hovered)) {
           return Colors.transparent;
         } else {

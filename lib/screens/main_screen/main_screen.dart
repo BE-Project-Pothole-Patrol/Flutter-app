@@ -1,5 +1,7 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
+import '../../widgets/linear_progress_indicator_with_text.dart';
 import 'widgets/custom_bottom_nav_bar.dart';
 import 'widgets/potholes_map_tab.dart';
 import 'widgets/report_potholes_tab.dart';
@@ -13,6 +15,28 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selected = 0;
+  bool isCameraInitialized = false;
+  late CameraDescription _camera;
+
+  @override
+  void initState() {
+    super.initState();
+    getSystemCamera().then((_) {
+      debugPrint('Success in accessing system camera!');
+      setState(() {
+        isCameraInitialized = true;
+      });
+    }).catchError((e) {
+      debugPrint('Error in accessing system camera..');
+      debugPrint(e.toString());
+    });
+  }
+
+  Future<void> getSystemCamera() async {
+    final cameras = await availableCameras();
+    _camera = cameras.first;
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -24,8 +48,8 @@ class _MainScreenState extends State<MainScreen> {
           alignment: Alignment.center,
           children: [
             _selected == 0
-                ? const Positioned.fill(
-                    child: ReportPotholesTab(),
+                ? Positioned.fill(
+                    child: isCameraInitialized ? ReportPotholesTab(camera: _camera,) : const LinearProgressIndicatorWithText(text: "Trying to Acess Your Camera...",),
                   )
                 : const Positioned.fill(
                     child: PotholesMapTab(),

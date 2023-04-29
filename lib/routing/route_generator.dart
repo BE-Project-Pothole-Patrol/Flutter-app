@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../screens/camera_screen.dart';
 import '../screens/get_otp_screen/get_otp_screen.dart';
 import '../screens/login_screen/login_screen.dart';
 import '../screens/main_screen/main_screen.dart';
@@ -8,6 +9,7 @@ import '../screens/onboarding_screen2.dart';
 import '../screens/register_screen/register_screen.dart';
 import '../screens/splash_screen.dart';
 import '../screens/verify_otp_screen/verify_otp_screen.dart';
+import 'args/camera_screen_args.dart';
 import 'args/get_otp_screen_args.dart';
 import 'args/login_screen_args.dart';
 import 'args/register_screen_args.dart';
@@ -56,6 +58,11 @@ class RouteGenerator {
         });
       case '/mainScreen':
         return MaterialPageRoute(builder: (_) => const MainScreen());
+      case '/cameraScreen':
+        return MaterialPageRoute(builder: (_) {
+          CameraScreenArgs args = settings.arguments as CameraScreenArgs;
+          return CameraScreen(camera: args.camera,);
+        });
       default:
         return _errorRoute();
     }

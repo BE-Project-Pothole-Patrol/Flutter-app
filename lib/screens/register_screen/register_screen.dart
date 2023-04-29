@@ -226,6 +226,7 @@ class RegisterScreen extends StatelessWidget {
                   child: CustomTextButton(
                     size: size,
                     text: "Sign Up with Google",
+                    onTap: (){},
                   ),
                 ),
                 SizedBox(

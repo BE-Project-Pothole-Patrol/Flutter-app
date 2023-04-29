@@ -16,6 +16,7 @@ import 'screens/get_otp_screen/get_otp_screen.dart';
 import 'screens/verify_otp_screen/verify_otp_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider(create: (_) => OtpInputProvider()),
@@ -34,11 +35,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'PotNoHole',
+      title: 'Pothole Patrol',
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: _themeManager.themeMode,
-      initialRoute: '/splashScreen',
+      initialRoute: '/mainScreen',
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
