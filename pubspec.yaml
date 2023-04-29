@@ -48,6 +48,8 @@ dependencies:
   camera:
   path_provider: 
   path:
+  http_parser: ^4.0.2
+  location: ^4.2.0
 
 dev_dependencies:
   flutter_test:
