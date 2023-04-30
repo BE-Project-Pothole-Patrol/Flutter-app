@@ -1,3 +1,2 @@
-const localBaseUrl = "http://10.0.2.2:8000/api/";
-const authBaseUrl = "${localBaseUrl}auth/";
-const mainBaseUrl = "http://10.0.2.2:8000/api/pothole-report/";
+const localAuthBaseUrl = "http://10.0.2.2:8000/api/auth/";
+const localMainBaseUrl = "http://10.0.2.2:8000/api/pothole-report/";

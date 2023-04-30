@@ -31,7 +31,7 @@ class RegisterScreen extends StatelessWidget {
   Future<UserCreatedModel> registerUser(
       Map<String, String> userData, int code, int number) async {
     final res = await http.post(
-      Uri.parse("${Constants.localBaseUrl}registerUser/"),
+      Uri.parse("${Constants.localAuthBaseUrl}registerUser/"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

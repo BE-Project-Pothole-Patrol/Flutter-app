@@ -27,7 +27,7 @@ class VerifyOtpScreen extends StatelessWidget {
 
     Future<Verified> verifyUser(int countryCode, int number, String otp) async {
       final res = await http.post(
-        Uri.parse("${Constants.localBaseUrl}verifyOTP/"),
+        Uri.parse("${Constants.localAuthBaseUrl}verifyOTP/"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

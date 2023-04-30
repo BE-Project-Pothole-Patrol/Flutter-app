@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../utils/secure_storage_util.dart';
 import 'location_search_bar.dart';
 import 'map_nav_input.dart';
 import 'navigate_button.dart';
@@ -19,12 +20,38 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
+  static const CameraPosition _initialPosition = CameraPosition(
+    target: LatLng(19.0760, 72.8777),
+    zoom: 15,
   );
 
   bool isExpanded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    SecureStorageUtil.getLastAccessedLocation().then((locationStr) {
+      debugPrint("Last Acessed Location: $locationStr");
+      if (locationStr.isEmpty) return;
+
+      double latitude = double.parse(locationStr.split(" ")[0]);
+      double longitude = double.parse(locationStr.split(" ")[1]);
+
+      debugPrint("$latitude $longitude");
+      _changeMapLocation(latitude,longitude);
+    }).catchError((e) {
+      debugPrint(e.toString());
+    });
+  }
+
+  Future<void> _changeMapLocation(double lat, double long) async {
+    final GoogleMapController controller = await _controller.future;
+    CameraPosition newCameraPosition = CameraPosition(
+      target: LatLng(lat, long),
+      zoom: 15,
+    );
+    controller.animateCamera(CameraUpdate.newCameraPosition(newCameraPosition));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +65,8 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
           alignment: Alignment.topCenter,
           children: [
             GoogleMap(
-              mapType: MapType.hybrid,
-              initialCameraPosition: _kGooglePlex,
+              mapType: MapType.normal,
+              initialCameraPosition: _initialPosition,
               onMapCreated: (GoogleMapController controller) {
                 _controller.complete(controller);
               },

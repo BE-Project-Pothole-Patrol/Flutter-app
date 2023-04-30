@@ -11,6 +11,7 @@ import 'package:location/location.dart';
 import '../../../routing/args/camera_screen_args.dart';
 import '../../../themes/theme_constants.dart';
 import '../../../utils/secure_storage_util.dart';
+import '../../../utils/secure_storage_util.dart';
 import '../../../widgets/custom_text_button.dart';
 import '../../../utils/constants.dart' as Constants;
 import '../../../utils/location_util.dart';
@@ -45,7 +46,7 @@ class _ReportPotholesTabState extends State<ReportPotholesTab> {
       Map<String, dynamic> geoLocation, File imageFile) async {
     String token = await SecureStorageUtil.getCurrentAccessToken();
 
-    final req = http.MultipartRequest('POST', Uri.parse(Constants.mainBaseUrl))
+    final req = http.MultipartRequest('POST', Uri.parse(Constants.localMainBaseUrl))
       ..headers['Authorization'] = 'Bearer $token'
       ..fields['title'] = title
       ..fields['desc'] = descripton
@@ -239,21 +240,22 @@ class _ReportPotholesTabState extends State<ReportPotholesTab> {
                   debugPrint('Reporting... $_title $_desc');
 
                   LocationUtil.getUserLocation().then((value) {
+                    SecureStorageUtil.saveLastAccessedLocation("${value.latitude} ${value.longitude}");
                     Map<String, dynamic> geoLocation = {
                       'type': 'Point',
                       'coordinates': [value.latitude, value.longitude]
                     };
 
-                    reportPothole(_title, _desc, geoLocation, File(_imageUri)).then((value){
+                    reportPothole(_title, _desc, geoLocation, File(_imageUri))
+                        .then((value) {
                       debugPrint('Success!');
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("Your report has been received"),
                       ));
-                    }).catchError((e){
+                    }).catchError((e) {
                       debugPrint('There was some error!');
                       debugPrint(e.toString());
                     });
-                    
                   }).catchError((e) {
                     debugPrint(e.toString());
                   });

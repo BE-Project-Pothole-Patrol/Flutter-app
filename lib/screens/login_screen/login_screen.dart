@@ -31,7 +31,7 @@ class LoginScreen extends StatelessWidget {
 
   Future<JwtTokenModel> loginUser(String username, String password) async {
     final res = await http.post(
-      Uri.parse("${Constants.localBaseUrl}token/"),
+      Uri.parse("${Constants.localAuthBaseUrl}token/"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

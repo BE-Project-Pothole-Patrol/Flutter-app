@@ -47,7 +47,7 @@ class _GetOtpScreenState extends State<GetOtpScreen> {
 
     Future<Otp> getOtp(int countryCode, int number) async {
       final res = await http.post(
-        Uri.parse("${Constants.localBaseUrl}generateOTP/"),
+        Uri.parse("${Constants.localAuthBaseUrl}generateOTP/"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

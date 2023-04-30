@@ -18,7 +18,7 @@ class SplashScreen extends StatelessWidget {
 
   Future<JwtTokenModel> refreshToken(String refresh) async {
     final res = await http.post(
-      Uri.parse("${Constants.localBaseUrl}token/refresh/"),
+      Uri.parse("${Constants.localAuthBaseUrl}token/refresh/"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
