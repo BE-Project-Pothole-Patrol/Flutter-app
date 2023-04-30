@@ -13,6 +13,7 @@ import '../../../themes/theme_constants.dart';
 import '../../../utils/secure_storage_util.dart';
 import '../../../widgets/custom_text_button.dart';
 import '../../../utils/constants.dart' as Constants;
+import '../../../utils/location_util.dart';
 
 class ReportPotholesTab extends StatefulWidget {
   const ReportPotholesTab({
@@ -68,28 +69,6 @@ class _ReportPotholesTabState extends State<ReportPotholesTab> {
       debugPrint('There was some error!');
       throw Exception(body);
     }
-  }
-
-  Future<LocationData> getUserLocation() async {
-    Location location = Location();
-
-    bool serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) {
-        throw Exception("Location Not Enabled!");
-      }
-    }
-
-    PermissionStatus permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        throw Exception("Permission Not Granted");
-      }
-    }
-
-    return await location.getLocation();
   }
 
   @override
@@ -259,7 +238,7 @@ class _ReportPotholesTabState extends State<ReportPotholesTab> {
                 onTap: () {
                   debugPrint('Reporting... $_title $_desc');
 
-                  getUserLocation().then((value) {
+                  LocationUtil.getUserLocation().then((value) {
                     Map<String, dynamic> geoLocation = {
                       'type': 'Point',
                       'coordinates': [value.latitude, value.longitude]
