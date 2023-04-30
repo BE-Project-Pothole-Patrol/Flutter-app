@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../themes/theme_constants.dart';
+import '../../../utils/constants.dart' as Constants;
+import '../../../utils/location_util.dart';
 
 class LocationSearchBar extends StatelessWidget {
   const LocationSearchBar({
@@ -18,6 +23,33 @@ class LocationSearchBar extends StatelessWidget {
     'orange',
   ];
 
+  Future<List<List<String>>> _fetchQueryMatches(String query) async {
+    String encodedQuery = query.trim().replaceAll(" ", "%20");
+    final geo = await LocationUtil.getUserLocation();
+    String autocompleteUrl =
+        "${Constants.placesAutocompleteBaseUrl}?input=$encodedQuery&radius=4000000&location=${geo.latitude}%2C${geo.longitude}&key=${Constants.apiKey}";
+
+    final res = await http.get(Uri.parse(autocompleteUrl));
+
+    if (res.statusCode == 200) {
+      debugPrint('Success!');
+      debugPrint(res.body);
+
+      Map<String, dynamic> data = jsonDecode(res.body);
+
+      List<List<String>> places = [];
+      for (final place in data['predictions']) {
+        places.add([place['description'], place['place_id']]);
+      }
+
+      return places;
+    } else {
+      debugPrint('There was some error in fetching places...');
+      debugPrint(res.body);
+      throw Exception('Error :(');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,9 +65,12 @@ class LocationSearchBar extends StatelessWidget {
       ),
       child: Autocomplete<String>(
         optionsBuilder: (TextEditingValue textEditingValue) {
-          if (textEditingValue.text == '') {
+          debugPrint(textEditingValue.text);
+
+          if (textEditingValue.text.isEmpty) {
             return const Iterable<String>.empty();
           }
+          
           return _kOptions.where((String option) {
             return option.contains(textEditingValue.text.toLowerCase());
           });
@@ -52,13 +87,17 @@ class LocationSearchBar extends StatelessWidget {
                 width: width * 0.95,
                 height: 200,
                 child: ListView.builder(
-                  itemCount: _kOptions.length,
+                  itemCount: options.length,
                   prototypeItem: const ListTile(
                     title: Text(""),
                   ),
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(_kOptions[index]),
+                    final String option = options.elementAt(index);
+                    return GestureDetector(
+                      onTap: () => onSelected(option),
+                      child: ListTile(
+                        title: Text(option),
+                      ),
                     );
                   },
                 ),
@@ -88,9 +127,10 @@ class LocationSearchBar extends StatelessWidget {
                 color: kPrimaryColor,
               ),
               hintText: "Search Location",
-              hintStyle: Theme.of(context).inputDecorationTheme.hintStyle?.copyWith(
-                      fontSize: 17,
-                    ),
+              hintStyle:
+                  Theme.of(context).inputDecorationTheme.hintStyle?.copyWith(
+                        fontSize: 17,
+                      ),
               border: InputBorder.none,
               focusedBorder: InputBorder.none,
               enabledBorder: InputBorder.none,
