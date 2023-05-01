@@ -12,22 +12,18 @@ class LocationSearchBar extends StatelessWidget {
     super.key,
     required this.width,
     required this.marginTop,
+    required this.onPlaceSelect,
   });
 
   final double width;
   final double marginTop;
-
-  static const List<String> _kOptions = <String>[
-    'apple',
-    'banana',
-    'orange',
-  ];
+  final Function(String) onPlaceSelect;
 
   Future<List<List<String>>> _fetchQueryMatches(String query) async {
     String encodedQuery = query.trim().replaceAll(" ", "%20");
-    final geo = await LocationUtil.getUserLocation();
+    final userLocation = await LocationUtil.getUserLocation();
     String autocompleteUrl =
-        "${Constants.placesAutocompleteBaseUrl}?input=$encodedQuery&radius=4000000&location=${geo.latitude}%2C${geo.longitude}&key=${Constants.apiKey}";
+        "${Constants.placesAutocompleteBaseUrl}?input=$encodedQuery&radius=4000000&location=${userLocation.latitude}%2C${userLocation.longitude}&key=${Constants.apiKey}";
 
     final res = await http.get(Uri.parse(autocompleteUrl));
 
@@ -70,10 +66,8 @@ class LocationSearchBar extends StatelessWidget {
           if (textEditingValue.text.isEmpty) {
             return const Iterable<String>.empty();
           }
-          
-          return _kOptions.where((String option) {
-            return option.contains(textEditingValue.text.toLowerCase());
-          });
+
+          return [textEditingValue.text];
         },
         onSelected: (String selection) {
           debugPrint('You just selected $selection');
@@ -86,19 +80,37 @@ class LocationSearchBar extends StatelessWidget {
               child: SizedBox(
                 width: width * 0.95,
                 height: 200,
-                child: ListView.builder(
-                  itemCount: options.length,
-                  prototypeItem: const ListTile(
-                    title: Text(""),
-                  ),
-                  itemBuilder: (context, index) {
-                    final String option = options.elementAt(index);
-                    return GestureDetector(
-                      onTap: () => onSelected(option),
-                      child: ListTile(
-                        title: Text(option),
-                      ),
-                    );
+                child: FutureBuilder(
+                  future: _fetchQueryMatches(options.first),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasError) {
+                        return ListTile(
+                            title: Text('Error: ${snapshot.error}'));
+                      } else {
+                        return ListView.builder(
+                          itemCount: snapshot.data?.length,
+                          prototypeItem: const ListTile(
+                            title: Text(""),
+                          ),
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                onSelected(snapshot.data![index].first);
+                                onPlaceSelect(snapshot.data![index].last);
+                              },
+                              child: ListTile(
+                                title: Text(snapshot.data![index].first),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
                   },
                 ),
               ),

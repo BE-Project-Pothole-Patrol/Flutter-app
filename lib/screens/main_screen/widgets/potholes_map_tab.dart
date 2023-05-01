@@ -41,7 +41,7 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
     final GoogleMapController controller = await _controller.future;
     CameraPosition newCameraPosition = CameraPosition(
       target: LatLng(lat, long),
-      zoom: 15,
+      zoom: 18,
     );
     controller.animateCamera(CameraUpdate.newCameraPosition(newCameraPosition));
   }
@@ -92,6 +92,29 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
         _markers[pothole['id'].toString()] = marker;
       }
     });
+  }
+
+  Future<LatLng> _getCoordinatesFromId(String placeId) async {
+    String placeDetailsUrl =
+        "${Constants.placesDetailsBaseUrl}?place_id=$placeId&key=${Constants.apiKey}";
+
+    final res = await http.get(Uri.parse(placeDetailsUrl));
+
+    if (res.statusCode == 200) {
+      debugPrint('Successfully fetched place details');
+      debugPrint(res.body);
+      final placeDetails = jsonDecode(res.body);
+      LatLng placeCoordinates = LatLng(
+        placeDetails['result']['geometry']['location']['lat'],
+        placeDetails['result']['geometry']['location']['lng'],
+      );
+      return placeCoordinates;
+    } else {
+      debugPrint('Error in fetching place details');
+      debugPrint(res.body);
+
+      throw Exception("Error in fetching place details :(");
+    }
   }
 
   @override
@@ -155,6 +178,18 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
               LocationSearchBar(
                 width: size.width * 0.85,
                 marginTop: size.height * 0.03,
+                onPlaceSelect: (placeId) {
+                  debugPrint('place_id selected: $placeId');
+
+                  _getCoordinatesFromId(placeId).then((coordinates) {
+                    debugPrint(
+                        "Place latitude:${coordinates.latitude} longitude:${coordinates.longitude}");
+                    _changeMapLocation(
+                        coordinates.latitude, coordinates.longitude);
+                  }).catchError((e) {
+                    debugPrint(e.toString());
+                  });
+                },
               ),
           ],
         ),
