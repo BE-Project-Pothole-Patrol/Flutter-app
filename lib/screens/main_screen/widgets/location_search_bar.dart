@@ -58,7 +58,7 @@ class LocationSearchBar extends StatelessWidget {
         height: 50,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(20)),
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
           border: Border.all(color: kWhiteDark,width: 2),
         ),
         child: Autocomplete<String>(
