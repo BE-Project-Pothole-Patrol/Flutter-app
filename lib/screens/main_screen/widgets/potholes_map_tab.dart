@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../models/directions_model.dart';
 import '../../../utils/secure_storage_util.dart';
 import 'location_search_bar.dart';
 import 'map_nav_input.dart';
@@ -12,6 +13,7 @@ import 'navigate_button.dart';
 import 'start_navigation_button.dart';
 import '../../../utils/constants.dart' as Constants;
 import '../../../services/google_maps_api.dart';
+import '../../../themes/theme_constants.dart';
 
 class PotholesMapTab extends StatefulWidget {
   const PotholesMapTab({super.key});
@@ -30,8 +32,12 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
   );
 
   final Map<String, Marker> _markers = {};
+  final Set<Polyline> _polyline = {};
 
-  bool isExpanded = false;
+  bool _isExpanded = false;
+  String _sourceId = '';
+  String _destId = '';
+  String _mode = '';
 
   @override
   void initState() {
@@ -111,54 +117,108 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
               initialCameraPosition: _initialPosition,
               onMapCreated: _onMapCreated,
               markers: _markers.values.toSet(),
+              polylines: _polyline,
               padding: EdgeInsets.only(bottom: size.height * 0.45),
             ),
-            if (isExpanded)
+            if (_isExpanded)
               MapNavInput(
                 size: size,
                 onBackBtnPress: (val) {
                   setState(() {
-                    isExpanded = val;
+                    _isExpanded = val;
                   });
                 },
                 onSourceSelect: (sourceId) {
                   debugPrint('Source Place Id $sourceId');
+                  _sourceId = sourceId;
                 },
                 onDestinationSelect: (destId) {
                   debugPrint('Destination Place Id $destId');
+                  _destId = destId;
+                },
+                onModeSelect: (mode) {
+                  _mode = mode;
                 },
               ),
-            if (isExpanded)
+            if (_isExpanded)
               Positioned(
                 bottom: size.height * 0.03 + 65,
                 child: SizedBox(
                   width: size.width * 0.85,
                   child: Row(
-                    children: const [
+                    children: [
                       StartNavigationButton(
                         text: "Preview",
+                        onTap: () async {
+                          LatLng source =
+                              await GoogleMapsApi.getCoordinatesFromId(
+                                  _sourceId);
+                          LatLng dest =
+                              await GoogleMapsApi.getCoordinatesFromId(_destId);
+
+                          _changeMapLocation(source.latitude, source.longitude);
+
+                          Directions directions =
+                              await GoogleMapsApi.getDirections(
+                                  _sourceId, _destId, _mode);
+
+                          setState(() {
+                            _markers[_sourceId] = Marker(
+                                markerId: MarkerId(_sourceId),
+                                position: source,
+                                infoWindow: const InfoWindow(
+                                  title: "Source",
+                                ),
+                                icon: BitmapDescriptor.defaultMarkerWithHue(
+                                    BitmapDescriptor.hueBlue));
+
+                            _markers[_destId] = Marker(
+                              markerId: MarkerId(_destId),
+                              position: dest,
+                              infoWindow: const InfoWindow(
+                                title: "Destination",
+                              ),
+                              icon: BitmapDescriptor.defaultMarkerWithHue(
+                                  BitmapDescriptor.hueBlue),
+                            );
+
+                            _polyline.clear();
+                            _polyline.add(Polyline(
+                              polylineId: PolylineId("$_sourceId#$_destId"),
+                              visible: true,
+                              //latlng is List<LatLng>
+                              points: directions.polylinePoints
+                                  .map((e) => LatLng(e.latitude, e.longitude))
+                                  .toList(),
+                              color: kPrimaryColorDark,
+                            ));
+
+                            _isExpanded = false;
+                          });
+                        },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       StartNavigationButton(
                         text: "Start",
+                        onTap: () {},
                       ),
                     ],
                   ),
                 ),
               ),
-            if (!isExpanded)
+            if (!_isExpanded)
               Positioned(
                 bottom: size.height * 0.03 + 65,
                 right: 10,
                 child: NavigateButton(onPress: (val) {
                   setState(() {
-                    isExpanded = val;
+                    _isExpanded = val;
                   });
                 }),
               ),
-            if (!isExpanded)
+            if (!_isExpanded)
               LocationSearchBar(
                 width: size.width * 0.85,
                 marginTop: size.height * 0.03,

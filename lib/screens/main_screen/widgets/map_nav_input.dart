@@ -18,6 +18,7 @@ class MapNavInput extends StatefulWidget {
     required this.onBackBtnPress,
     required this.onSourceSelect,
     required this.onDestinationSelect,
+    required this.onModeSelect,
   });
 
   final Size size;
@@ -25,18 +26,13 @@ class MapNavInput extends StatefulWidget {
   final Function(bool) onBackBtnPress;
   final Function(String) onSourceSelect;
   final Function(String) onDestinationSelect;
+  final Function(String) onModeSelect;
 
   @override
   State<MapNavInput> createState() => _MapNavInputState();
 }
 
 class _MapNavInputState extends State<MapNavInput> {
-  static const List<String> _kOptions = <String>[
-    'apple',
-    'banana',
-    'orange',
-  ];
-
   late TravelMode _mode;
 
   @override
@@ -107,11 +103,15 @@ class _MapNavInputState extends State<MapNavInput> {
                         width: widget.size.width * 0.8,
                         height: 200,
                         child: FutureBuilder(
-                          future: GoogleMapsApi.fetchQueryMatches(options.first),
+                          future:
+                              GoogleMapsApi.fetchQueryMatches(options.first),
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.done) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
                               if (snapshot.hasError) {
-                                return ListTile(title: Text('Error: ${snapshot.error}'),);
+                                return ListTile(
+                                  title: Text('Error: ${snapshot.error}'),
+                                );
                               } else {
                                 return ListView.builder(
                                   itemCount: snapshot.data?.length,
@@ -125,7 +125,10 @@ class _MapNavInputState extends State<MapNavInput> {
                                         widget.onSourceSelect(
                                             snapshot.data![index].last);
                                       },
-                                      child: ListTile(title:Text(snapshot.data![index].first),),
+                                      child: ListTile(
+                                        title:
+                                            Text(snapshot.data![index].first),
+                                      ),
                                     );
                                   },
                                 );
@@ -163,9 +166,12 @@ class _MapNavInputState extends State<MapNavInput> {
                         color: kPrimaryColor,
                       ),
                       hintText: "Enter Start Location",
-                      hintStyle: Theme.of(context).inputDecorationTheme.hintStyle?.copyWith(
-                        fontSize: 16,
-                      ),
+                      hintStyle: Theme.of(context)
+                          .inputDecorationTheme
+                          .hintStyle
+                          ?.copyWith(
+                            fontSize: 16,
+                          ),
                       border: InputBorder.none,
                       focusedBorder: InputBorder.none,
                       enabledBorder: InputBorder.none,
@@ -207,11 +213,15 @@ class _MapNavInputState extends State<MapNavInput> {
                         width: widget.size.width * 0.8,
                         height: 200,
                         child: FutureBuilder(
-                          future: GoogleMapsApi.fetchQueryMatches(options.first),
+                          future:
+                              GoogleMapsApi.fetchQueryMatches(options.first),
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.done) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
                               if (snapshot.hasError) {
-                                return ListTile(title: Text('Error: ${snapshot.error}'),);
+                                return ListTile(
+                                  title: Text('Error: ${snapshot.error}'),
+                                );
                               } else {
                                 return ListView.builder(
                                   itemCount: snapshot.data?.length,
@@ -225,7 +235,10 @@ class _MapNavInputState extends State<MapNavInput> {
                                         widget.onDestinationSelect(
                                             snapshot.data![index].last);
                                       },
-                                      child: ListTile(title:Text(snapshot.data![index].first),),
+                                      child: ListTile(
+                                        title:
+                                            Text(snapshot.data![index].first),
+                                      ),
                                     );
                                   },
                                 );
@@ -263,9 +276,12 @@ class _MapNavInputState extends State<MapNavInput> {
                         color: kDestinationMarkerRed,
                       ),
                       hintText: "Enter Destination Location",
-                      hintStyle: Theme.of(context).inputDecorationTheme.hintStyle?.copyWith(
-                        fontSize: 16,
-                      ),
+                      hintStyle: Theme.of(context)
+                          .inputDecorationTheme
+                          .hintStyle
+                          ?.copyWith(
+                            fontSize: 16,
+                          ),
                       border: InputBorder.none,
                       focusedBorder: InputBorder.none,
                       enabledBorder: InputBorder.none,
@@ -290,6 +306,7 @@ class _MapNavInputState extends State<MapNavInput> {
                   children: [
                     GestureDetector(
                       onTap: () {
+                        widget.onModeSelect('driving');
                         setState(() {
                           _mode = TravelMode.car;
                         });
@@ -304,6 +321,7 @@ class _MapNavInputState extends State<MapNavInput> {
                     ),
                     GestureDetector(
                       onTap: () {
+                        widget.onModeSelect('bicycling');
                         setState(() {
                           _mode = TravelMode.bike;
                         });
@@ -318,6 +336,7 @@ class _MapNavInputState extends State<MapNavInput> {
                     ),
                     GestureDetector(
                       onTap: () {
+                        widget.onModeSelect('driving');
                         setState(() {
                           _mode = TravelMode.bus;
                         });
@@ -332,6 +351,7 @@ class _MapNavInputState extends State<MapNavInput> {
                     ),
                     GestureDetector(
                       onTap: () {
+                        widget.onModeSelect('walking');
                         setState(() {
                           _mode = TravelMode.walk;
                         });

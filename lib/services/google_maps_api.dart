@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
+import '../models/directions_model.dart';
 import '../utils/location_util.dart';
 import '../utils/constants.dart' as Constants;
 
@@ -55,6 +56,23 @@ class GoogleMapsApi {
       debugPrint(res.body);
 
       throw Exception("Error in fetching place details :(");
+    }
+  }
+
+  static Future<Directions> getDirections(
+      String sourceId, String destinationId,String mode) async {
+    String directionsUrl =
+        "${Constants.getDirectionsBaseUrl}?origin=place_id:$sourceId&destination=place_id:$destinationId&mode=$mode&key=${Constants.apiKey}";
+    final res = await http.get(Uri.parse(directionsUrl));
+
+    if (res.statusCode == 200) {
+      debugPrint('Directions fetched sucessfully');
+      return Directions.fromMap(jsonDecode(res.body));
+    } else {
+      debugPrint('Error in fetching directions');
+      debugPrint(res.body);
+
+      throw Exception("Error in fetching directions :(");
     }
   }
 }

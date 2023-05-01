@@ -6,20 +6,25 @@ class StartNavigationButton extends StatelessWidget {
   const StartNavigationButton({
     super.key,
     required this.text,
+    required this.onTap,
   });
 
   final String text;
+  final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: TextButton(
-        onPressed: (){},
+        onPressed: () {
+          onTap();
+        },
         style: Theme.of(context).textButtonTheme.style?.copyWith(
               padding: MaterialStateProperty.all<EdgeInsets>(
                 const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
               ),
-              elevation: MaterialStateProperty.resolveWith<double>((states) {
+              elevation: MaterialStateProperty.resolveWith<double>(
+                (states) {
                   return 5.0;
                 },
               ),
