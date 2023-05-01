@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../services/google_maps_api.dart';
 import '../../../themes/theme_constants.dart';
 
 enum TravelMode {
@@ -14,12 +15,16 @@ class MapNavInput extends StatefulWidget {
     super.key,
     required this.size,
     this.mode = TravelMode.car,
-    required this.onPress,
+    required this.onBackBtnPress,
+    required this.onSourceSelect,
+    required this.onDestinationSelect,
   });
 
   final Size size;
   final TravelMode mode;
-  final Function(bool) onPress;
+  final Function(bool) onBackBtnPress;
+  final Function(String) onSourceSelect;
+  final Function(String) onDestinationSelect;
 
   @override
   State<MapNavInput> createState() => _MapNavInputState();
@@ -62,7 +67,7 @@ class _MapNavInputState extends State<MapNavInput> {
           children: [
             GestureDetector(
               onTap: () {
-                widget.onPress(false);
+                widget.onBackBtnPress(false);
               },
               child: const Align(
                 alignment: Alignment.topLeft,
@@ -88,12 +93,10 @@ class _MapNavInputState extends State<MapNavInput> {
                   if (textEditingValue.text == '') {
                     return const Iterable<String>.empty();
                   }
-                  return _kOptions.where((String option) {
-                    return option.contains(textEditingValue.text.toLowerCase());
-                  });
+                  return [textEditingValue.text];
                 },
                 onSelected: (String selection) {
-                  debugPrint('You just selected $selection');
+                  debugPrint('Selected source: $selection');
                 },
                 optionsViewBuilder: (context, onSelected, options) {
                   return Align(
@@ -103,15 +106,35 @@ class _MapNavInputState extends State<MapNavInput> {
                       child: SizedBox(
                         width: widget.size.width * 0.8,
                         height: 200,
-                        child: ListView.builder(
-                          itemCount: _kOptions.length,
-                          prototypeItem: const ListTile(
-                            title: Text(""),
-                          ),
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title: Text(_kOptions[index]),
-                            );
+                        child: FutureBuilder(
+                          future: GoogleMapsApi.fetchQueryMatches(options.first),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.done) {
+                              if (snapshot.hasError) {
+                                return ListTile(title: Text('Error: ${snapshot.error}'),);
+                              } else {
+                                return ListView.builder(
+                                  itemCount: snapshot.data?.length,
+                                  prototypeItem: const ListTile(
+                                    title: Text(""),
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        onSelected(snapshot.data![index].first);
+                                        widget.onSourceSelect(
+                                            snapshot.data![index].last);
+                                      },
+                                      child: ListTile(title:Text(snapshot.data![index].first),),
+                                    );
+                                  },
+                                );
+                              }
+                            } else {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
                           },
                         ),
                       ),
@@ -170,12 +193,10 @@ class _MapNavInputState extends State<MapNavInput> {
                   if (textEditingValue.text == '') {
                     return const Iterable<String>.empty();
                   }
-                  return _kOptions.where((String option) {
-                    return option.contains(textEditingValue.text.toLowerCase());
-                  });
+                  return [textEditingValue.text];
                 },
                 onSelected: (String selection) {
-                  debugPrint('You just selected $selection');
+                  debugPrint('Selected destination $selection');
                 },
                 optionsViewBuilder: (context, onSelected, options) {
                   return Align(
@@ -185,15 +206,35 @@ class _MapNavInputState extends State<MapNavInput> {
                       child: SizedBox(
                         width: widget.size.width * 0.8,
                         height: 200,
-                        child: ListView.builder(
-                          itemCount: _kOptions.length,
-                          prototypeItem: const ListTile(
-                            title: Text(""),
-                          ),
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title: Text(_kOptions[index]),
-                            );
+                        child: FutureBuilder(
+                          future: GoogleMapsApi.fetchQueryMatches(options.first),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.done) {
+                              if (snapshot.hasError) {
+                                return ListTile(title: Text('Error: ${snapshot.error}'),);
+                              } else {
+                                return ListView.builder(
+                                  itemCount: snapshot.data?.length,
+                                  prototypeItem: const ListTile(
+                                    title: Text(""),
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        onSelected(snapshot.data![index].first);
+                                        widget.onDestinationSelect(
+                                            snapshot.data![index].last);
+                                      },
+                                      child: ListTile(title:Text(snapshot.data![index].first),),
+                                    );
+                                  },
+                                );
+                              }
+                            } else {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
                           },
                         ),
                       ),

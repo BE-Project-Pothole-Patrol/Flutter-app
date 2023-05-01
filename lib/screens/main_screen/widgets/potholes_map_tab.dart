@@ -116,10 +116,16 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
             if (isExpanded)
               MapNavInput(
                 size: size,
-                onPress: (val) {
+                onBackBtnPress: (val) {
                   setState(() {
                     isExpanded = val;
                   });
+                },
+                onSourceSelect: (sourceId) {
+                  debugPrint('Source Place Id $sourceId');
+                },
+                onDestinationSelect: (destId) {
+                  debugPrint('Destination Place Id $destId');
                 },
               ),
             if (isExpanded)
@@ -159,7 +165,8 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
                 onPlaceSelect: (placeId) {
                   debugPrint('place_id selected: $placeId');
 
-                  GoogleMapsApi.getCoordinatesFromId(placeId).then((coordinates) {
+                  GoogleMapsApi.getCoordinatesFromId(placeId)
+                      .then((coordinates) {
                     debugPrint(
                         "Place latitude:${coordinates.latitude} longitude:${coordinates.longitude}");
                     _changeMapLocation(
