@@ -11,6 +11,7 @@ import 'map_nav_input.dart';
 import 'navigate_button.dart';
 import 'start_navigation_button.dart';
 import '../../../utils/constants.dart' as Constants;
+import '../../../services/google_maps_api.dart';
 
 class PotholesMapTab extends StatefulWidget {
   const PotholesMapTab({super.key});
@@ -94,29 +95,6 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
     });
   }
 
-  Future<LatLng> _getCoordinatesFromId(String placeId) async {
-    String placeDetailsUrl =
-        "${Constants.placesDetailsBaseUrl}?place_id=$placeId&key=${Constants.apiKey}";
-
-    final res = await http.get(Uri.parse(placeDetailsUrl));
-
-    if (res.statusCode == 200) {
-      debugPrint('Successfully fetched place details');
-      debugPrint(res.body);
-      final placeDetails = jsonDecode(res.body);
-      LatLng placeCoordinates = LatLng(
-        placeDetails['result']['geometry']['location']['lat'],
-        placeDetails['result']['geometry']['location']['lng'],
-      );
-      return placeCoordinates;
-    } else {
-      debugPrint('Error in fetching place details');
-      debugPrint(res.body);
-
-      throw Exception("Error in fetching place details :(");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -181,7 +159,7 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
                 onPlaceSelect: (placeId) {
                   debugPrint('place_id selected: $placeId');
 
-                  _getCoordinatesFromId(placeId).then((coordinates) {
+                  GoogleMapsApi.getCoordinatesFromId(placeId).then((coordinates) {
                     debugPrint(
                         "Place latitude:${coordinates.latitude} longitude:${coordinates.longitude}");
                     _changeMapLocation(

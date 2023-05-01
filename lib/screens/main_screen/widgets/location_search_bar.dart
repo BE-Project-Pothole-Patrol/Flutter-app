@@ -1,11 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 import '../../../themes/theme_constants.dart';
-import '../../../utils/constants.dart' as Constants;
-import '../../../utils/location_util.dart';
+import '../../../services/google_maps_api.dart';
 
 class LocationSearchBar extends StatelessWidget {
   const LocationSearchBar({
@@ -18,33 +14,6 @@ class LocationSearchBar extends StatelessWidget {
   final double width;
   final double marginTop;
   final Function(String) onPlaceSelect;
-
-  Future<List<List<String>>> _fetchQueryMatches(String query) async {
-    String encodedQuery = query.trim().replaceAll(" ", "%20");
-    final userLocation = await LocationUtil.getUserLocation();
-    String autocompleteUrl =
-        "${Constants.placesAutocompleteBaseUrl}?input=$encodedQuery&radius=4000000&location=${userLocation.latitude}%2C${userLocation.longitude}&key=${Constants.apiKey}";
-
-    final res = await http.get(Uri.parse(autocompleteUrl));
-
-    if (res.statusCode == 200) {
-      debugPrint('Success!');
-      debugPrint(res.body);
-
-      Map<String, dynamic> data = jsonDecode(res.body);
-
-      List<List<String>> places = [];
-      for (final place in data['predictions']) {
-        places.add([place['description'], place['place_id']]);
-      }
-
-      return places;
-    } else {
-      debugPrint('There was some error in fetching places...');
-      debugPrint(res.body);
-      throw Exception('Error :(');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +52,7 @@ class LocationSearchBar extends StatelessWidget {
                   width: width * 0.95,
                   height: 200,
                   child: FutureBuilder(
-                    future: _fetchQueryMatches(options.first),
+                    future: GoogleMapsApi.fetchQueryMatches(options.first),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         if (snapshot.hasError) {
