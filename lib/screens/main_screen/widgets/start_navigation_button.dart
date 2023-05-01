@@ -19,6 +19,10 @@ class StartNavigationButton extends StatelessWidget {
               padding: MaterialStateProperty.all<EdgeInsets>(
                 const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
               ),
+              elevation: MaterialStateProperty.resolveWith<double>((states) {
+                  return 5.0;
+                },
+              ),
               backgroundColor: MaterialStateColor.resolveWith(
                 (states) {
                   if (states.contains(MaterialState.pressed)) {

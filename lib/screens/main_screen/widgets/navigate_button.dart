@@ -14,6 +14,7 @@ class NavigateButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
+      elevation: 5,
       borderRadius: const BorderRadius.all(Radius.circular(10)),
       color: Colors.white,
       child: InkWell(
