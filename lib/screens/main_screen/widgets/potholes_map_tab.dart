@@ -88,8 +88,8 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
       for (final pothole in potholeInfo) {
         final marker = Marker(
           markerId: MarkerId(pothole['id'].toString()),
-          position: LatLng(pothole['geo_location']['coordinates'][0],
-              pothole['geo_location']['coordinates'][1]),
+          position: LatLng(pothole['geo_location']['coordinates'][1],
+              pothole['geo_location']['coordinates'][0]),
           infoWindow: InfoWindow(
             title: pothole['title'],
             snippet: pothole['desc'],

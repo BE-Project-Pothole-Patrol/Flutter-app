@@ -267,7 +267,7 @@ class _ReportPotholesTabState extends State<ReportPotholesTab> {
                     SecureStorageUtil.saveLastAccessedLocation("${value.latitude} ${value.longitude}");
                     Map<String, dynamic> geoLocation = {
                       'type': 'Point',
-                      'coordinates': [value.latitude, value.longitude]
+                      'coordinates': [value.longitude, value.latitude],
                     };
 
                     reportPothole(_title, _desc, geoLocation, File(_imageUri))
