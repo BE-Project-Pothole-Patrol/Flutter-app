@@ -16,6 +16,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selected = 0;
   bool isCameraInitialized = false;
+  bool _isPending = false;
   late CameraDescription _camera;
 
   @override
@@ -49,7 +50,18 @@ class _MainScreenState extends State<MainScreen> {
           children: [
             _selected == 0
                 ? Positioned.fill(
-                    child: isCameraInitialized ? ReportPotholesTab(camera: _camera,) : const LinearProgressIndicatorWithText(text: "Trying to Acess Your Camera...",),
+                    child: isCameraInitialized
+                        ? ReportPotholesTab(
+                            camera: _camera,
+                            isPending: (val) {
+                              setState(() {
+                                _isPending = val;
+                              });
+                            },
+                          )
+                        : const LinearProgressIndicatorWithText(
+                            text: "Trying to Acess Your Camera...",
+                          ),
                   )
                 : const Positioned.fill(
                     child: PotholesMapTab(),
@@ -68,6 +80,16 @@ class _MainScreenState extends State<MainScreen> {
                     );
                   },
                   selected: _selected,
+                ),
+              ),
+            if (_isPending)
+              Positioned.fill(
+                child: Opacity(
+                  opacity: 0.7,
+                  child: Container(
+                    decoration: const BoxDecoration(color: Colors.black),
+                    child: const Center(child: CircularProgressIndicator()),
+                  ),
                 ),
               ),
           ],

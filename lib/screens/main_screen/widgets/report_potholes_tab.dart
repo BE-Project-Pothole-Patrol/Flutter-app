@@ -6,11 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:location/location.dart';
 
 import '../../../routing/args/camera_screen_args.dart';
 import '../../../themes/theme_constants.dart';
-import '../../../utils/secure_storage_util.dart';
 import '../../../utils/secure_storage_util.dart';
 import '../../../widgets/custom_text_button.dart';
 import '../../../utils/constants.dart' as Constants;
@@ -20,15 +18,20 @@ class ReportPotholesTab extends StatefulWidget {
   const ReportPotholesTab({
     super.key,
     required this.camera,
+    required this.isPending,
   });
 
   final CameraDescription camera;
+  final Function(bool) isPending;
 
   @override
   State<ReportPotholesTab> createState() => _ReportPotholesTabState();
 }
 
 class _ReportPotholesTabState extends State<ReportPotholesTab> {
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+
   bool _isTitleValid = true;
   bool _isReportBtnEnabled = false;
   bool _isImageUriValid = false;
@@ -40,29 +43,42 @@ class _ReportPotholesTabState extends State<ReportPotholesTab> {
   void initState() {
     super.initState();
     debugPrint("Report Potholes Tab initState()");
+    _titleController.addListener(_onTitleChange);
+    _descriptionController.addListener(_onDescriptionChange);
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
   }
 
   Future<void> reportPothole(String title, String descripton,
       Map<String, dynamic> geoLocation, File imageFile) async {
     String token = await SecureStorageUtil.getCurrentAccessToken();
 
-    final req = http.MultipartRequest('POST', Uri.parse(Constants.localMainBaseUrl))
-      ..headers['Authorization'] = 'Bearer $token'
-      ..fields['title'] = title
-      ..fields['desc'] = descripton
-      ..fields['geo_location'] = jsonEncode(geoLocation)
-      ..files.add(
-        http.MultipartFile(
-          'road_img',
-          imageFile.readAsBytes().asStream(),
-          imageFile.lengthSync(),
-          filename: basename(imageFile.path),
-          contentType: MediaType('image', 'jpg'),
-        ),
-      );
+    final req =
+        http.MultipartRequest('POST', Uri.parse(Constants.localMainBaseUrl))
+          ..headers['Authorization'] = 'Bearer $token'
+          ..fields['title'] = title
+          ..fields['desc'] = descripton
+          ..fields['geo_location'] = jsonEncode(geoLocation)
+          ..files.add(
+            http.MultipartFile(
+              'road_img',
+              imageFile.readAsBytes().asStream(),
+              imageFile.lengthSync(),
+              filename: basename(imageFile.path),
+              contentType: MediaType('image', 'jpg'),
+            ),
+          );
 
     final res = await req.send();
     final body = await res.stream.bytesToString();
+
+    // //code just for testing it out
+    // final Map<String, dynamic> data = jsonDecode(body);
     if (res.statusCode == 201) {
       debugPrint('Successfully recd. your report!');
       debugPrint(body);
@@ -70,6 +86,27 @@ class _ReportPotholesTabState extends State<ReportPotholesTab> {
       debugPrint('There was some error!');
       throw Exception(body);
     }
+  }
+
+  void _onTitleChange() {
+    debugPrint('Listening to Title Change ${_titleController.text}');
+    String value = _titleController.text;
+    if (value.length >= 10) {
+      setState(() {
+        _isTitleValid = true;
+        _isReportBtnEnabled = _isTitleValid && _isImageUriValid;
+      });
+    } else {
+      setState(() {
+        _isTitleValid = false;
+        _isReportBtnEnabled = false;
+      });
+    }
+    _title = value;
+  }
+
+  void _onDescriptionChange() {
+    _desc = _descriptionController.text;
   }
 
   @override
@@ -148,20 +185,7 @@ class _ReportPotholesTabState extends State<ReportPotholesTab> {
                 maxLines: 1,
                 maxLength: 50,
                 textAlignVertical: TextAlignVertical.bottom,
-                onChanged: (value) {
-                  if (value.length > 10) {
-                    setState(() {
-                      _isTitleValid = true;
-                      _isReportBtnEnabled = _isTitleValid && _isImageUriValid;
-                    });
-                  } else {
-                    setState(() {
-                      _isTitleValid = false;
-                      _isReportBtnEnabled = false;
-                    });
-                  }
-                  _title = value;
-                },
+                controller: _titleController,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
@@ -206,13 +230,11 @@ class _ReportPotholesTabState extends State<ReportPotholesTab> {
                 maxLines: 4,
                 maxLength: 200,
                 textAlignVertical: TextAlignVertical.bottom,
+                controller: _descriptionController,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
                     ),
-                onChanged: (value) {
-                  _desc = value;
-                },
                 decoration: InputDecoration(
                   counterText: '',
                   hintText: "Enter a Description (Optional)",
@@ -239,6 +261,8 @@ class _ReportPotholesTabState extends State<ReportPotholesTab> {
                 onTap: () {
                   debugPrint('Reporting... $_title $_desc');
 
+                  widget.isPending(true);
+
                   LocationUtil.getUserLocation().then((value) {
                     SecureStorageUtil.saveLastAccessedLocation("${value.latitude} ${value.longitude}");
                     Map<String, dynamic> geoLocation = {
@@ -249,6 +273,19 @@ class _ReportPotholesTabState extends State<ReportPotholesTab> {
                     reportPothole(_title, _desc, geoLocation, File(_imageUri))
                         .then((value) {
                       debugPrint('Success!');
+                      widget.isPending(false);
+                      _titleController.clear();
+                      _descriptionController.clear();
+
+                      setState(() {
+                        _isTitleValid = true;
+                        _isImageUriValid = false;
+                        _isReportBtnEnabled = false;
+                        _title = '';
+                        _desc = '';
+                        _imageUri = '';
+                      });
+
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("Your report has been received"),
                       ));
@@ -258,7 +295,7 @@ class _ReportPotholesTabState extends State<ReportPotholesTab> {
                     });
                   }).catchError((e) {
                     debugPrint(e.toString());
-                  });
+                  }).whenComplete(() => widget.isPending(false));
                 },
               ),
             ),
