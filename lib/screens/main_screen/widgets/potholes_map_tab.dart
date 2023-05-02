@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:location/location.dart';
 
 import '../../../models/directions_model.dart';
 import '../../../utils/location_util.dart';
@@ -28,6 +29,8 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
   //     Completer<GoogleMapController>();
 
   late GoogleMapController _controller;
+  late StreamSubscription<LocationData> _streamSubscription;
+
   static const CameraPosition _initialPosition = CameraPosition(
     target: LatLng(19.0760, 72.8777),
     zoom: 15,
@@ -41,6 +44,7 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
   String _destId = '';
   String _mode = 'driving';
   bool _isUserLocnSource = false;
+  bool _isUserNavigating = false;
 
   @override
   void initState() {
@@ -199,7 +203,8 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
 
                             _polyline.clear();
                             _polyline.add(Polyline(
-                              polylineId: const PolylineId(Constants.previewPolyline),
+                              polylineId:
+                                  const PolylineId(Constants.previewPolyline),
                               visible: true,
                               //latlng is List<LatLng>
                               points: directions.polylinePoints
@@ -223,13 +228,19 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
                             double.parse(_sourceId.split("%2C")[1]),
                           );
 
-                          LatLng destination = await GoogleMapsApi.getCoordinatesFromId(_destId);
+                          LatLng destination =
+                              await GoogleMapsApi.getCoordinatesFromId(_destId);
 
-                          Directions directions = await GoogleMapsApi.getDirections(_sourceId, _destId, _mode, true);
+                          Directions directions =
+                              await GoogleMapsApi.getDirections(
+                                  _sourceId, _destId, _mode, true);
 
-                          await _changeMapLocation(source.latitude, source.longitude,zoom: 256);
+                          await _changeMapLocation(
+                              source.latitude, source.longitude,
+                              zoom: 256);
 
                           setState(() {
+                            _isUserNavigating = true;
                             _markers[Constants.sourceMarker] = Marker(
                               markerId: const MarkerId(Constants.sourceMarker),
                               position: source,
@@ -251,9 +262,10 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
                                   BitmapDescriptor.hueAzure),
                             );
 
-                              _polyline.clear();
-                              _polyline.add(Polyline(
-                              polylineId: const PolylineId(Constants.startPolyline),
+                            _polyline.clear();
+                            _polyline.add(Polyline(
+                              polylineId:
+                                  const PolylineId(Constants.startPolyline),
                               visible: true,
                               points: directions.polylinePoints
                                   .map((e) => LatLng(e.latitude, e.longitude))
@@ -264,31 +276,40 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
                             _isExpanded = false;
                           });
 
-                          LocationUtil.getUserLocationUpdates((location) async {
-                              debugPrint('Location changed!');
-                              debugPrint("lat: ${location.latitude} long: ${location.longitude}");
-                              directions =await GoogleMapsApi.getDirections("${location.latitude}%2C${location.longitude}", _destId, _mode, true);
+                          _streamSubscription =
+                              await LocationUtil.getUserLocationUpdates(
+                                  (location) async {
+                            debugPrint('Location changed!');
+                            debugPrint("lat: ${location.latitude} long: ${location.longitude}");
+                            directions = await GoogleMapsApi.getDirections("${location.latitude}%2C${location.longitude}",_destId, _mode,true);
 
-                              setState(() {
-                                 _markers[Constants.commuterMarker] = Marker(
-                                    markerId: const MarkerId(Constants.commuterMarker),
-                                    position: LatLng(location.latitude!, location.latitude!),
-                                    infoWindow: const InfoWindow(title: "You",),
-                                    icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-                                  );
+                            await _changeMapLocation(location.latitude!, location.longitude!,zoom: 14);
+                            setState(() {
+                              _markers[Constants.commuterMarker] = Marker(
+                                markerId:
+                                    const MarkerId(Constants.commuterMarker),
+                                position: LatLng(
+                                    location.latitude!, location.latitude!),
+                                infoWindow: const InfoWindow(
+                                  title: "You",
+                                ),
+                                icon: BitmapDescriptor.defaultMarkerWithHue(
+                                    BitmapDescriptor.hueBlue),
+                              );
 
-                                  _polyline.clear();
+                              _polyline.clear();
 
-                                  _polyline.add(Polyline(
-                                  polylineId: const PolylineId(Constants.startPolyline),
-                                  visible: true,
-                                  points: directions.polylinePoints
-                                      .map((e) => LatLng(e.latitude, e.longitude))
-                                      .toList(),
-                                  color: kPrimaryColorDark,
-                                ));
-                              });
+                              _polyline.add(Polyline(
+                                polylineId:
+                                    const PolylineId(Constants.startPolyline),
+                                visible: true,
+                                points: directions.polylinePoints
+                                    .map((e) => LatLng(e.latitude, e.longitude))
+                                    .toList(),
+                                color: kPrimaryColorDark,
+                              ));
                             });
+                          });
                         },
                       ),
                     ],
@@ -299,11 +320,20 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
               Positioned(
                 bottom: size.height * 0.03 + 65,
                 right: 10,
-                child: NavigateButton(onPress: (val) {
-                  setState(() {
-                    _isExpanded = val;
-                  });
-                }),
+                child: NavigateButton(
+                    iconData:
+                        !_isUserNavigating ? Icons.turn_right : Icons.clear,
+                    onPress: (val) {
+                      if (_isUserNavigating) {
+                        _streamSubscription.cancel();
+                      }
+                      setState(() {
+                        if (_isUserNavigating) {
+                          _isUserNavigating = false;
+                        }
+                        _isExpanded = val;
+                      });
+                    }),
               ),
             if (!_isExpanded)
               LocationSearchBar(

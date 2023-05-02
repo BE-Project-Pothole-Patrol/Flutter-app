@@ -6,10 +6,12 @@ class NavigateButton extends StatelessWidget {
     super.key,
     required this.onPress,
     this.isExpanded = false,
+    this.iconData=Icons.turn_right,
   });
 
   final Function(bool) onPress;
   final bool isExpanded;
+  final IconData iconData;
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +26,11 @@ class NavigateButton extends StatelessWidget {
         splashColor: kWhiteDarker,
         highlightColor: kWhiteDarker,
         borderRadius: const BorderRadius.all(Radius.circular(10)),
-        child: const SizedBox(
+        child: SizedBox(
           width: 55,
           height: 55,
           child: Icon(
-            Icons.turn_right,
+            iconData,
             size: 40,
             color: kPrimaryColor,
           ),
