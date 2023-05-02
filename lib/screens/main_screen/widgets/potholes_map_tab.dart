@@ -37,7 +37,8 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
   bool _isExpanded = false;
   String _sourceId = '';
   String _destId = '';
-  String _mode = '';
+  String _mode = 'driving';
+  bool _isUserLocnSource = false;
 
   @override
   void initState() {
@@ -128,15 +129,17 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
                     _isExpanded = val;
                   });
                 },
-                onSourceSelect: (sourceId) {
+                onSourceSelect: (sourceId, isUserLocn) {
                   debugPrint('Source Place Id $sourceId');
                   _sourceId = sourceId;
+                  _isUserLocnSource = isUserLocn;
                 },
                 onDestinationSelect: (destId) {
                   debugPrint('Destination Place Id $destId');
                   _destId = destId;
                 },
                 onModeSelect: (mode) {
+                  debugPrint('selected mode $mode');
                   _mode = mode;
                 },
               ),
@@ -150,9 +153,13 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
                       StartNavigationButton(
                         text: "Preview",
                         onTap: () async {
-                          LatLng source =
-                              await GoogleMapsApi.getCoordinatesFromId(
-                                  _sourceId);
+                          debugPrint(
+                              "source $_sourceId dest $_destId $_isUserLocnSource");
+                          LatLng source = !_isUserLocnSource
+                              ? await GoogleMapsApi.getCoordinatesFromId(
+                                  _sourceId)
+                              : LatLng(double.parse(_sourceId.split("%2C")[0]),
+                                  double.parse(_sourceId.split("%2C")[1]));
                           LatLng dest =
                               await GoogleMapsApi.getCoordinatesFromId(_destId);
 
@@ -160,7 +167,7 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
 
                           Directions directions =
                               await GoogleMapsApi.getDirections(
-                                  _sourceId, _destId, _mode);
+                                  _sourceId, _destId, _mode, _isUserLocnSource);
 
                           setState(() {
                             _markers[_sourceId] = Marker(

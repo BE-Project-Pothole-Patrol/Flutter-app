@@ -9,7 +9,7 @@ import '../utils/location_util.dart';
 import '../utils/constants.dart' as Constants;
 
 class GoogleMapsApi {
-  static Future<List<List<String>>> fetchQueryMatches(String query) async {
+  static Future<List<List<String>>> fetchQueryMatches(String query,{bool isSourceQuery=false}) async {
     String encodedQuery = query.trim().replaceAll(" ", "%20");
     final userLocation = await LocationUtil.getUserLocation();
     String autocompleteUrl =
@@ -24,6 +24,15 @@ class GoogleMapsApi {
       Map<String, dynamic> data = jsonDecode(res.body);
 
       List<List<String>> places = [];
+
+      if (isSourceQuery) {
+        places.add([
+          "Your Location",
+          "${userLocation.latitude}%2C${userLocation.longitude}",
+          "USER_LOCATION_FIELD"
+        ]);
+      }
+
       for (final place in data['predictions']) {
         places.add([place['description'], place['place_id']]);
       }
@@ -60,9 +69,11 @@ class GoogleMapsApi {
   }
 
   static Future<Directions> getDirections(
-      String sourceId, String destinationId,String mode) async {
-    String directionsUrl =
-        "${Constants.getDirectionsBaseUrl}?origin=place_id:$sourceId&destination=place_id:$destinationId&mode=$mode&key=${Constants.apiKey}";
+      String source, String destination, String mode,bool isSourceLatLng) async {
+
+    String directionsUrl = !isSourceLatLng ?
+        "${Constants.getDirectionsBaseUrl}?origin=place_id:$source&destination=place_id:$destination&mode=$mode&key=${Constants.apiKey}"
+        :"${Constants.getDirectionsBaseUrl}?origin=$source&destination=place_id:$destination&mode=$mode&key=${Constants.apiKey}";
     final res = await http.get(Uri.parse(directionsUrl));
 
     if (res.statusCode == 200) {

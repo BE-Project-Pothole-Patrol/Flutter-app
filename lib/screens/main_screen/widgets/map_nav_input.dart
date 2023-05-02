@@ -24,7 +24,7 @@ class MapNavInput extends StatefulWidget {
   final Size size;
   final TravelMode mode;
   final Function(bool) onBackBtnPress;
-  final Function(String) onSourceSelect;
+  final Function(String,bool) onSourceSelect;
   final Function(String) onDestinationSelect;
   final Function(String) onModeSelect;
 
@@ -104,7 +104,7 @@ class _MapNavInputState extends State<MapNavInput> {
                         height: 200,
                         child: FutureBuilder(
                           future:
-                              GoogleMapsApi.fetchQueryMatches(options.first),
+                              GoogleMapsApi.fetchQueryMatches(options.first,isSourceQuery: true),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
@@ -122,8 +122,12 @@ class _MapNavInputState extends State<MapNavInput> {
                                     return GestureDetector(
                                       onTap: () {
                                         onSelected(snapshot.data![index].first);
+                                        if(snapshot.data![index].length==3){
+                                          widget.onSourceSelect(snapshot.data![index][1],true);
+                                        }else{
                                         widget.onSourceSelect(
-                                            snapshot.data![index].last);
+                                            snapshot.data![index].last,false);
+                                        }
                                       },
                                       child: ListTile(
                                         title:
