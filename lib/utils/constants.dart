@@ -7,3 +7,8 @@ const placesDetailsBaseUrl =
 const getDirectionsBaseUrl =
     "https://maps.googleapis.com/maps/api/directions/json";
 const apiKey = "AIzaSyDGJBiV4LUiW-VnibqsPvbHlEgMBtPKY6M";
+const sourceMarker = "SOURCE";
+const destinationMarker = "DEST";
+const commuterMarker = "COMMUTER";
+const previewPolyline = "PREVIEW_POLYLINE";
+const startPolyline = "START_POLYLINE";

@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../models/directions_model.dart';
+import '../../../utils/location_util.dart';
 import '../../../utils/secure_storage_util.dart';
 import 'location_search_bar.dart';
 import 'map_nav_input.dart';
@@ -23,9 +24,10 @@ class PotholesMapTab extends StatefulWidget {
 }
 
 class _PotholesMapTabState extends State<PotholesMapTab> {
-  final Completer<GoogleMapController> _controller =
-      Completer<GoogleMapController>();
+  // final Completer<GoogleMapController> _controller =
+  //     Completer<GoogleMapController>();
 
+  late GoogleMapController _controller;
   static const CameraPosition _initialPosition = CameraPosition(
     target: LatLng(19.0760, 72.8777),
     zoom: 15,
@@ -45,13 +47,14 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
     super.initState();
   }
 
-  Future<void> _changeMapLocation(double lat, double long) async {
-    final GoogleMapController controller = await _controller.future;
+  Future<void> _changeMapLocation(double lat, double long,
+      {double zoom = 18}) async {
     CameraPosition newCameraPosition = CameraPosition(
       target: LatLng(lat, long),
-      zoom: 18,
+      zoom: zoom,
     );
-    controller.animateCamera(CameraUpdate.newCameraPosition(newCameraPosition));
+    _controller
+        .animateCamera(CameraUpdate.newCameraPosition(newCameraPosition));
   }
 
   Future<List<dynamic>> _fetchPotholeInfo() async {
@@ -70,7 +73,8 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
     debugPrint('Map has been created...');
-    _controller.complete(controller);
+
+    _controller = controller;
 
     String locationStr = await SecureStorageUtil.getLastAccessedLocation();
 
@@ -101,6 +105,8 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
       }
     });
   }
+
+  Future<void> _startNavigation(LatLng source, LatLng destination) async {}
 
   @override
   Widget build(BuildContext context) {
@@ -170,28 +176,30 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
                                   _sourceId, _destId, _mode, _isUserLocnSource);
 
                           setState(() {
-                            _markers[_sourceId] = Marker(
-                                markerId: MarkerId(_sourceId),
-                                position: source,
-                                infoWindow: const InfoWindow(
-                                  title: "Source",
-                                ),
-                                icon: BitmapDescriptor.defaultMarkerWithHue(
-                                    BitmapDescriptor.hueBlue));
+                            _markers[Constants.sourceMarker] = Marker(
+                              markerId: const MarkerId(Constants.sourceMarker),
+                              position: source,
+                              infoWindow: const InfoWindow(
+                                title: "Source",
+                              ),
+                              icon: BitmapDescriptor.defaultMarkerWithHue(
+                                  BitmapDescriptor.hueAzure),
+                            );
 
-                            _markers[_destId] = Marker(
-                              markerId: MarkerId(_destId),
+                            _markers[Constants.destinationMarker] = Marker(
+                              markerId:
+                                  const MarkerId(Constants.destinationMarker),
                               position: dest,
                               infoWindow: const InfoWindow(
                                 title: "Destination",
                               ),
                               icon: BitmapDescriptor.defaultMarkerWithHue(
-                                  BitmapDescriptor.hueBlue),
+                                  BitmapDescriptor.hueAzure),
                             );
 
                             _polyline.clear();
                             _polyline.add(Polyline(
-                              polylineId: PolylineId("$_sourceId#$_destId"),
+                              polylineId: const PolylineId(Constants.previewPolyline),
                               visible: true,
                               //latlng is List<LatLng>
                               points: directions.polylinePoints
@@ -209,7 +217,79 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
                       ),
                       StartNavigationButton(
                         text: "Start",
-                        onTap: () {},
+                        onTap: () async {
+                          LatLng source = LatLng(
+                            double.parse(_sourceId.split("%2C")[0]),
+                            double.parse(_sourceId.split("%2C")[1]),
+                          );
+
+                          LatLng destination = await GoogleMapsApi.getCoordinatesFromId(_destId);
+
+                          Directions directions = await GoogleMapsApi.getDirections(_sourceId, _destId, _mode, true);
+
+                          await _changeMapLocation(source.latitude, source.longitude,zoom: 256);
+
+                          setState(() {
+                            _markers[Constants.sourceMarker] = Marker(
+                              markerId: const MarkerId(Constants.sourceMarker),
+                              position: source,
+                              infoWindow: const InfoWindow(
+                                title: "Source",
+                              ),
+                              icon: BitmapDescriptor.defaultMarkerWithHue(
+                                  BitmapDescriptor.hueAzure),
+                            );
+
+                            _markers[Constants.destinationMarker] = Marker(
+                              markerId:
+                                  const MarkerId(Constants.destinationMarker),
+                              position: destination,
+                              infoWindow: const InfoWindow(
+                                title: "Destination",
+                              ),
+                              icon: BitmapDescriptor.defaultMarkerWithHue(
+                                  BitmapDescriptor.hueAzure),
+                            );
+
+                              _polyline.clear();
+                              _polyline.add(Polyline(
+                              polylineId: const PolylineId(Constants.startPolyline),
+                              visible: true,
+                              points: directions.polylinePoints
+                                  .map((e) => LatLng(e.latitude, e.longitude))
+                                  .toList(),
+                              color: kPrimaryColorDark,
+                            ));
+
+                            _isExpanded = false;
+                          });
+
+                          LocationUtil.getUserLocationUpdates((location) async {
+                              debugPrint('Location changed!');
+                              debugPrint("lat: ${location.latitude} long: ${location.longitude}");
+                              directions =await GoogleMapsApi.getDirections("${location.latitude}%2C${location.longitude}", _destId, _mode, true);
+
+                              setState(() {
+                                 _markers[Constants.commuterMarker] = Marker(
+                                    markerId: const MarkerId(Constants.commuterMarker),
+                                    position: LatLng(location.latitude!, location.latitude!),
+                                    infoWindow: const InfoWindow(title: "You",),
+                                    icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+                                  );
+
+                                  _polyline.clear();
+
+                                  _polyline.add(Polyline(
+                                  polylineId: const PolylineId(Constants.startPolyline),
+                                  visible: true,
+                                  points: directions.polylinePoints
+                                      .map((e) => LatLng(e.latitude, e.longitude))
+                                      .toList(),
+                                  color: kPrimaryColorDark,
+                                ));
+                              });
+                            });
+                        },
                       ),
                     ],
                   ),
