@@ -7,6 +7,7 @@ import '../../services/auth_api.dart';
 import '../../themes/theme_constants.dart';
 import '../../widgets/choice_divider.dart';
 import '../../widgets/custom_text_button.dart';
+import '../../widgets/linear_progress_indicator_with_text.dart';
 import '../../widgets/user_data_text_field.dart';
 import '../../widgets/partial_colored_text.dart';
 import '../../utils/secure_storage_util.dart';
@@ -31,7 +32,7 @@ class LoginScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
-            child: Column(
+            child:  !context.watch<LoginProvider>().isLoading ?  Column(
               children: [
                 SizedBox(
                   height: size.height * 0.02,
@@ -107,10 +108,11 @@ class LoginScreen extends StatelessWidget {
                   width: size.width * 0.8,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: context.watch<LoginProvider>().isValid
-                        ? () {
+                    onPressed: context.watch<LoginProvider>().isValid? () {
                             Map<String, String> loginData =
                                 context.read<LoginProvider>().getLoginData();
+                            
+                            context.read<LoginProvider>().changeLoadingStatus(true);
                             AuthApi.loginUser(loginData["username"] ?? '',loginData["password"] ?? '')
                               .then((token) {
                               debugPrint("Access Token: ${token.access}");
@@ -120,8 +122,13 @@ class LoginScreen extends StatelessWidget {
 
                               Navigator.of(context).pushReplacementNamed('/mainScreen',arguments: '',);
                             }).catchError((e) {
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                content: Text("Could not log you in, your credentials might be wrong..."),
+                              ));
                               debugPrint('Some Error Occured:');
                               debugPrint(e.toString());
+                            }).whenComplete(() {
+                              context.read<LoginProvider>().changeLoadingStatus(false);
                             });
                           }
                         : null,
@@ -174,8 +181,14 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
               ],
+            ) :
+          Container(
+            margin: EdgeInsets.only(top: size.height * 0.45),
+            width: size.width * 0.8,
+            child: const LinearProgressIndicatorWithText(
+            text: "Trying to Log You In..."),
             ),
-          ),
+          ), 
         ),
       ),
     );

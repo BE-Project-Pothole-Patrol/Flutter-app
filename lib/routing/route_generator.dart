@@ -49,6 +49,8 @@ class RouteGenerator {
         });
       case '/loginScreen':
         return MaterialPageRoute(builder: (_) {
+          //for testing it out
+          // LoginScreenArgs args = settings.arguments==null ? LoginScreenArgs(): settings.arguments as LoginScreenArgs;
           LoginScreenArgs args = settings.arguments as LoginScreenArgs;
           return LoginScreen(
             firstName: args.firstName,

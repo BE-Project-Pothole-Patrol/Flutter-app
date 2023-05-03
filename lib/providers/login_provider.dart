@@ -14,6 +14,14 @@ class LoginProvider extends ChangeNotifier {
   bool _isValid = false;
   bool get isValid => _isValid;
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  void changeLoadingStatus(bool val) {
+    _isLoading = val;
+    notifyListeners();
+  }
+
   bool checkValidity() {
     return isUsernameValid && isPasswordValid;
   }
@@ -28,13 +36,13 @@ class LoginProvider extends ChangeNotifier {
   void updatePassword(String val) {
     _password = val;
     _isPasswordValid = _password.isNotEmpty &&
-                       RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
-                       .hasMatch(_password);
+        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
+            .hasMatch(_password);
     _isValid = checkValidity();
     notifyListeners();
   }
 
-   Map<String, String> getLoginData() {
+  Map<String, String> getLoginData() {
     return {
       'username': _username,
       'password': _password,
