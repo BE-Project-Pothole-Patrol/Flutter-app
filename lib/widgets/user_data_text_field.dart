@@ -12,6 +12,7 @@ class UserDataTextField extends StatelessWidget {
     required this.isValid,
     required this.errorText,
     required this.onEdit,
+    this.isPasswordText=false,
   });
 
   final IconData icName;
@@ -21,6 +22,7 @@ class UserDataTextField extends StatelessWidget {
   final bool isValid;
   final String errorText;
   final Function(String) onEdit;
+  final bool isPasswordText;
 
   @override
   Widget build(BuildContext context) {
@@ -41,20 +43,15 @@ class UserDataTextField extends StatelessWidget {
               ),
               Expanded(
                 child: TextField(
+                  obscureText: isPasswordText,
                   onChanged: (val) {
                     onEdit(val);
                   },
                   textAlignVertical: TextAlignVertical.top,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge
-                      ?.copyWith(fontWeight: FontWeight.w500, fontSize: 18),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500, fontSize: 18),
                   decoration: InputDecoration(
                     hintText: hint,
-                    hintStyle: Theme.of(context)
-                        .inputDecorationTheme
-                        .hintStyle
-                        ?.copyWith(fontSize: 18),
+                    hintStyle: Theme.of(context).inputDecorationTheme.hintStyle?.copyWith(fontSize: 18),
                     errorText: !isValid ? '' : null,
                     errorStyle: const TextStyle(
                       height: 0,
@@ -71,7 +68,7 @@ class UserDataTextField extends StatelessWidget {
             child: Align(
               alignment: Alignment.centerRight,
               child: Text(
-                !isValid? errorText : '',
+                !isValid ? errorText : '',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: kErrorRed,
                       fontSize: 12,

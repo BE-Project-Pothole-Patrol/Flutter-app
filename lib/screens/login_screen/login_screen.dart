@@ -84,6 +84,7 @@ class LoginScreen extends StatelessWidget {
                   isValid: context.watch<LoginProvider>().isPasswordValid,
                   errorText: "Invalid Password",
                   onEdit: context.read<LoginProvider>().updatePassword,
+                  isPasswordText: true,
                 ),
                 SizedBox(
                   height: size.height * 0.02,
