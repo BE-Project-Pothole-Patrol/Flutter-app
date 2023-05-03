@@ -13,6 +13,14 @@ class OtpInputProvider extends ChangeNotifier {
   String _digit4 = '';
   String get digit4 => _digit4;
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  void changeLoadingStatus(bool val) {
+    _isLoading = val;
+    notifyListeners();
+  }
+
   bool get isValid =>
       _digit1.isNotEmpty &&
       _digit2.isNotEmpty &&
