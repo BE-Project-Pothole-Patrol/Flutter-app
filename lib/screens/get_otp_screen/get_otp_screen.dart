@@ -147,32 +147,31 @@ class _GetOtpScreenState extends State<GetOtpScreen> {
                       SizedBox(
                         width: size.width * 0.8,
                         child: ElevatedButton(
-                          onPressed: _isEnabled
-                              ? () {
+                          onPressed: _isEnabled? () {
                                   debugPrint(_userCodeVal);
                                   debugPrint(_userNumberVal);
-                                  int code =
-                                      int.parse(_userCodeVal.substring(1));
+                                  int code = int.parse(_userCodeVal.substring(1));
                                   int number = int.parse(_userNumberVal);
+
                                   setState(() {
                                     _isLoading = true;
                                   });
+
                                   getOtp(code, number).then((value) {
                                     debugPrint(value.otp);
-                                    Navigator.of(context).pushNamed(
-                                      '/verifyOtpScreen',
-                                      arguments: VerifyOtpScreenArgs(
-                                          number: number, code: code),
+                                    Navigator.of(context).pushNamed('/verifyOtpScreen',
+                                    arguments: VerifyOtpScreenArgs(number: number, code: code),
                                     );
-                                    setState(() {
-                                      _isLoading = false;
-                                    });
                                   }).catchError((e) {
-                                    setState(() {
-                                      _isLoading = false;
-                                    });
+                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                      content: Text("Could not get OTP, try sometime later..."),
+                                    ));
                                     debugPrint('error occured :(');
                                     debugPrint(e);
+                                  }).whenComplete((){
+                                    setState(() {
+                                      _isLoading = false;
+                                    });
                                   });
                                 }
                               : null,

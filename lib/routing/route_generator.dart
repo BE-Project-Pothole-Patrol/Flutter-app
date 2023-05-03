@@ -26,7 +26,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const OnboardingScreen2());
       case '/generateOtpScreen':
         return MaterialPageRoute(builder: (_) {
-          GetOtpScreenArgs args = settings.arguments as GetOtpScreenArgs;
+          GetOtpScreenArgs args = settings.arguments==null ? GetOtpScreenArgs(): settings.arguments as GetOtpScreenArgs;
           return GetOtpScreen(
             title: args.title,
           );

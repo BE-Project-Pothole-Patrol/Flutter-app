@@ -1,6 +1,6 @@
 class GetOtpScreenArgs {
   const GetOtpScreenArgs({
-    required this.title,
+    this.title='',
   });
   final String title;
 }

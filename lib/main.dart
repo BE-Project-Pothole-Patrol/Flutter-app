@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: _themeManager.themeMode,
-      initialRoute: '/loginScreen',
+      initialRoute: '/generateOtpScreen',
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
