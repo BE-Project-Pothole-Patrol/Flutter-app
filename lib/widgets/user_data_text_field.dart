@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../themes/theme_constants.dart';
 
+
 class UserDataTextField extends StatelessWidget {
   const UserDataTextField({
     super.key,
@@ -13,6 +14,7 @@ class UserDataTextField extends StatelessWidget {
     required this.errorText,
     required this.onEdit,
     this.isPasswordText=false,
+    this.keyboard=TextInputType.text,
   });
 
   final IconData icName;
@@ -23,6 +25,7 @@ class UserDataTextField extends StatelessWidget {
   final String errorText;
   final Function(String) onEdit;
   final bool isPasswordText;
+  final TextInputType keyboard;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +46,7 @@ class UserDataTextField extends StatelessWidget {
               ),
               Expanded(
                 child: TextField(
+                  keyboardType:keyboard,
                   obscureText: isPasswordText,
                   onChanged: (val) {
                     onEdit(val);

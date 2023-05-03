@@ -72,6 +72,7 @@ class LoginScreen extends StatelessWidget {
                   isValid: context.watch<LoginProvider>().isUsernameValid,
                   errorText: "Invalid Username",
                   onEdit: context.read<LoginProvider>().updateUsername,
+                  keyboard: TextInputType.name,
                 ),
                 SizedBox(
                   height: size.height * 0.00,
@@ -85,6 +86,7 @@ class LoginScreen extends StatelessWidget {
                   errorText: "Invalid Password",
                   onEdit: context.read<LoginProvider>().updatePassword,
                   isPasswordText: true,
+                  keyboard: TextInputType.visiblePassword,
                 ),
                 SizedBox(
                   height: size.height * 0.02,
