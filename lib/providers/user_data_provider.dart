@@ -34,6 +34,14 @@ class UserDataProvider extends ChangeNotifier {
   bool _isValid = false;
   bool get isValid => _isValid;
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  void changeLoadingStatus(bool val) {
+    _isLoading = val;
+    notifyListeners();
+  }
+
   bool checkValidity() {
     return isFirstNameValid &&
         isLastNameValid &&

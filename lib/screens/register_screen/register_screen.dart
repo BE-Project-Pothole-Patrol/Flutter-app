@@ -7,6 +7,7 @@ import '../../services/auth_api.dart';
 import '../../utils/shared_prefs_util.dart';
 import '../../widgets/choice_divider.dart';
 import '../../widgets/custom_text_button.dart';
+import '../../widgets/linear_progress_indicator_with_text.dart';
 import '../../widgets/user_data_text_field.dart';
 import '../../themes/theme_constants.dart';
 import '../../providers/user_data_provider.dart';
@@ -27,11 +28,12 @@ class RegisterScreen extends StatelessWidget {
     final SharedPreferencesManager prefs = SharedPreferencesManager();
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: !context.watch<UserDataProvider>().isLoading? AppBar() : null,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
-            child: Column(
+            child: !context.watch<UserDataProvider>().isLoading?
+            Column(
               children: [
                 Text(
                   "Sign Up",
@@ -58,6 +60,7 @@ class RegisterScreen extends StatelessWidget {
                   isValid: context.watch<UserDataProvider>().isFirstNameValid,
                   errorText: "Can't be Empty!",
                   onEdit: context.read<UserDataProvider>().updateFirstName,
+                  keyboard:TextInputType.name,
                 ),
                 SizedBox(
                   height: size.height * 0.0,
@@ -70,6 +73,7 @@ class RegisterScreen extends StatelessWidget {
                   isValid: context.watch<UserDataProvider>().isLastNameValid,
                   errorText: "Can't be empty!",
                   onEdit: context.read<UserDataProvider>().updateLastName,
+                  keyboard:TextInputType.name,
                 ),
                 SizedBox(
                   height: size.height * 0.0,
@@ -94,6 +98,7 @@ class RegisterScreen extends StatelessWidget {
                   isValid: context.watch<UserDataProvider>().isEmailValid,
                   errorText: "Invalid Email!",
                   onEdit: context.read<UserDataProvider>().updateEmail,
+                  keyboard:TextInputType.emailAddress,
                 ),
                 SizedBox(
                   height: size.height * 0.0,
@@ -106,6 +111,8 @@ class RegisterScreen extends StatelessWidget {
                   isValid: context.watch<UserDataProvider>().isPasswordValid,
                   errorText: "Enter a Strong Password!",
                   onEdit: context.read<UserDataProvider>().updatePassword,
+                  isPasswordText: true,
+                  keyboard: TextInputType.visiblePassword,
                 ),
                 SizedBox(
                   height: size.height * 0.0,
@@ -115,6 +122,8 @@ class RegisterScreen extends StatelessWidget {
                   hint: "Confirm Password",
                   width: size.width * 0.8,
                   spacing: size.width * 0.02,
+                  isPasswordText: true,
+                  keyboard: TextInputType.visiblePassword,
                   isValid:
                       context.watch<UserDataProvider>().isConfirmPasswordValid,
                   errorText: "Password is Invalid / Doesn't Match",
@@ -135,6 +144,7 @@ class RegisterScreen extends StatelessWidget {
                             debugPrint("$userData");
                             debugPrint("$code $number");
 
+                            context.read<UserDataProvider>().changeLoadingStatus(true);
                             AuthApi.registerUser(userData, code, number).then((value) {
                               debugPrint(value.success);
 
@@ -146,6 +156,7 @@ class RegisterScreen extends StatelessWidget {
                                 lastName: userData["lastName"] ?? '',
                                 email: userData["email"] ?? '',
                               ));
+
                               Navigator.pushNamedAndRemoveUntil(
                                 context,
                                 '/loginScreen',
@@ -157,8 +168,13 @@ class RegisterScreen extends StatelessWidget {
                                 ),
                               );
                             }).catchError((error) {
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                content: Text("Could not register you, try sometime later..."),
+                              ));
                               debugPrint('error occured :(');
                               debugPrint(error.toString());
+                            }).whenComplete((){
+                               context.read<UserDataProvider>().changeLoadingStatus(false);
                             });
                           }
                         : null,
@@ -196,6 +212,13 @@ class RegisterScreen extends StatelessWidget {
                   height: size.height * 0.02,
                 ),
               ],
+            ) :
+            Container(
+              margin: EdgeInsets.only(top: size.height * 0.45),
+              width: size.width * 0.8,
+              child: const LinearProgressIndicatorWithText(
+                text: "Registering You..."
+              ),
             ),
           ),
         ),
