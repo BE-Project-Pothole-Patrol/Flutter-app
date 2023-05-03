@@ -84,6 +84,7 @@ class UserInputForOtp extends StatelessWidget {
             Expanded(
               flex: 60,
               child: TextField(
+                keyboardType: TextInputType.phone,
                 onChanged: (value) {
                   onTextChanged(value);
                 },

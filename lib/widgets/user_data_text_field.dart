@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../themes/theme_constants.dart';
 
-
 class UserDataTextField extends StatelessWidget {
   const UserDataTextField({
     super.key,
