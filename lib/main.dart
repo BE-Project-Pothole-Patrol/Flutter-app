@@ -14,9 +14,11 @@ import 'screens/onboarding_screen1.dart';
 import 'screens/onboarding_screen2.dart';
 import 'screens/get_otp_screen/get_otp_screen.dart';
 import 'screens/verify_otp_screen/verify_otp_screen.dart';
+import 'utils/notification_util.dart';
 
-void main() {
+Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationUtil.initialize();
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider(create: (_) => OtpInputProvider()),

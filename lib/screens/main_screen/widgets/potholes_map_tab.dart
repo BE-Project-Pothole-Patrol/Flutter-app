@@ -8,6 +8,7 @@ import 'package:location/location.dart';
 
 import '../../../models/directions_model.dart';
 import '../../../utils/location_util.dart';
+import '../../../utils/notification_util.dart';
 import '../../../utils/secure_storage_util.dart';
 import 'location_search_bar.dart';
 import 'map_nav_input.dart';
@@ -110,7 +111,20 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
     });
   }
 
-  Future<void> _startNavigation(LatLng source, LatLng destination) async {}
+  Future<List<dynamic>> _getPotholesWithinARadius(LocationData currentLoc, int radius) async {
+    String url="${Constants.localGetPotholeBaseUrl}?dist=$radius&point=${currentLoc.longitude},${currentLoc.latitude}";
+    final res = await http.get(Uri.parse(url));
+
+    if(res.statusCode==200){
+      debugPrint('Successfully fetched potholes near you');
+      debugPrint(res.body);
+      List<dynamic> potholeInfo = jsonDecode(res.body);
+      return potholeInfo;
+    }else{
+      debugPrint('There was some error in fetching potholes near you');
+      throw Exception(res.body);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -237,7 +251,7 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
 
                           await _changeMapLocation(
                               source.latitude, source.longitude,
-                              zoom: 256);
+                              zoom: 14);
 
                           setState(() {
                             _isUserNavigating = true;
@@ -276,11 +290,19 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
                             _isExpanded = false;
                           });
 
-                          _streamSubscription =
-                              await LocationUtil.getUserLocationUpdates(
-                                  (location) async {
+                          _streamSubscription = await LocationUtil.getUserLocationUpdates((location) async {
                             debugPrint('Location changed!');
                             debugPrint("lat: ${location.latitude} long: ${location.longitude}");
+                            List<dynamic> nearbyPotholesList = await _getPotholesWithinARadius(location, 30);
+
+                            for(final pothole in nearbyPotholesList){
+                              NotificationUtil.showNotification(
+                                id:pothole['id'],
+                                title: 'Pothole Near You',
+                                body: 'Pothole'
+                              );
+                            }
+
                             directions = await GoogleMapsApi.getDirections("${location.latitude}%2C${location.longitude}",_destId, _mode,true);
 
                             await _changeMapLocation(location.latitude!, location.longitude!,zoom: 14);
