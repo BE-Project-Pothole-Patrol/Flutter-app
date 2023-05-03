@@ -8,7 +8,10 @@ import '../../widgets/linear_progress_indicator_with_text.dart';
 import 'widgets/user_input_for_otp.dart';
 
 class GetOtpScreen extends StatefulWidget {
-  const GetOtpScreen({super.key, this.title = "Enter Your Mobile No."});
+  const GetOtpScreen({
+    super.key,
+    this.title = "Enter Your Mobile No.",
+  });
 
   final String title;
 
@@ -33,7 +36,7 @@ class _GetOtpScreenState extends State<GetOtpScreen> {
   @override
   Widget build(BuildContext context) {
     debugPrint("in get opt screen build()");
-    Size size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
 
     final List<PhoneCodeModel> phoneCodeList = [
       PhoneCodeModel(

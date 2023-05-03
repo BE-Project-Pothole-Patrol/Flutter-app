@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import '../models/error_model.dart';
 import '../models/jwt_token_model.dart';
 import '../models/login_fail_model.dart';
+import '../models/number_verified_model.dart';
 import '../models/otp_model.dart';
 import '../models/refresh_error_model.dart';
 import '../utils/constants.dart' as Constants;
@@ -74,6 +75,31 @@ class AuthApi {
 
     if (res.statusCode == 200) {
       return Otp.fromJson(jsonDecode(res.body));
+    } else {
+      ErrorRes err = ErrorRes.fromJson(jsonDecode(res.body));
+      throw Exception(err.error);
+    }
+  }
+
+  static Future<Verified> verifyUser(
+      int countryCode, int number, String otp) async {
+    final res = await http.post(
+      Uri.parse("${Constants.localAuthBaseUrl}verifyOTP/"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+        <String, dynamic>{
+          "country_code": countryCode,
+          "number": number,
+          "otp": otp,
+        },
+      ),
+    );
+
+    if (res.statusCode == 200) {
+      debugPrint("Success!");
+      return Verified.fromJson(jsonDecode(res.body));
     } else {
       ErrorRes err = ErrorRes.fromJson(jsonDecode(res.body));
       throw Exception(err.error);
