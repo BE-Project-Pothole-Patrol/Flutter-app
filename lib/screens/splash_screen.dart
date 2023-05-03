@@ -71,7 +71,7 @@ class SplashScreen extends StatelessWidget {
       },
     );
 
-    Size size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
       body: SafeArea(
