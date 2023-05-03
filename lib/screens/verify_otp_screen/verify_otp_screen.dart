@@ -16,7 +16,11 @@ import '../../utils/shared_prefs_util.dart';
 import '../../models/user_fields_model.dart';
 
 class VerifyOtpScreen extends StatelessWidget {
-  const VerifyOtpScreen({super.key, required this.number, required this.code});
+  const VerifyOtpScreen({
+    super.key,
+    required this.number,
+    required this.code,
+  });
   final int number;
   final int code;
 

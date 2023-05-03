@@ -1,13 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
-import '../../models/error_model.dart';
-import '../../models/otp_model.dart';
 import '../../models/phone_code_model.dart';
 import '../../routing/args/verify_otp_screen_args.dart';
-import '../../utils/constants.dart' as Constants;
+import '../../services/auth_api.dart';
 import '../../themes/theme_constants.dart';
 import '../../widgets/linear_progress_indicator_with_text.dart';
 import 'widgets/user_input_for_otp.dart';
@@ -40,32 +35,10 @@ class _GetOtpScreenState extends State<GetOtpScreen> {
     debugPrint("in get opt screen build()");
     Size size = MediaQuery.of(context).size;
 
-    final List<PhoneCodeModel> list = [
+    final List<PhoneCodeModel> phoneCodeList = [
       PhoneCodeModel(
           id: 0, phoneCode: '+91', countryCode: 'in', countryName: 'India'),
     ];
-
-    Future<Otp> getOtp(int countryCode, int number) async {
-      final res = await http.post(
-        Uri.parse("${Constants.localAuthBaseUrl}generateOTP/"),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(
-          <String, int>{
-            "country_code": countryCode,
-            "number": number,
-          },
-        ),
-      );
-
-      if (res.statusCode == 200) {
-        return Otp.fromJson(jsonDecode(res.body));
-      } else {
-        ErrorRes err = ErrorRes.fromJson(jsonDecode(res.body));
-        throw Exception(err.error);
-      }
-    }
 
     return Scaffold(
       appBar: !_isLoading ? AppBar() : null,
@@ -107,7 +80,7 @@ class _GetOtpScreenState extends State<GetOtpScreen> {
                       SizedBox(
                         width: size.width * 0.8,
                         child: UserInputForOtp(
-                          list: list,
+                          list: phoneCodeList,
                           isError: _isError,
                           error: _error,
                           onTextChanged: (val) {
@@ -157,7 +130,7 @@ class _GetOtpScreenState extends State<GetOtpScreen> {
                                     _isLoading = true;
                                   });
 
-                                  getOtp(code, number).then((value) {
+                                  AuthApi.getOtp(code, number).then((value) {
                                     debugPrint(value.otp);
                                     Navigator.of(context).pushNamed('/verifyOtpScreen',
                                     arguments: VerifyOtpScreenArgs(number: number, code: code),
