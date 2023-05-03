@@ -1,43 +1,16 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 
-import '../models/jwt_token_model.dart';
-import '../models/refresh_error_model.dart';
 import '../routing/args/login_screen_args.dart';
+import '../services/auth_api.dart';
 import '../utils/shared_prefs_util.dart';
-// ignore: library_prefixes
-import '../utils/constants.dart' as Constants;
+
 import '../utils/secure_storage_util.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
-
-  Future<JwtTokenModel> refreshToken(String refresh) async {
-    final res = await http.post(
-      Uri.parse("${Constants.localAuthBaseUrl}token/refresh/"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(
-        <String, dynamic>{
-          "refresh": refresh,
-        },
-      ),
-    );
-
-    if (res.statusCode == 200) {
-      debugPrint("Successfully refreshed!");
-      debugPrint(res.body);
-      return JwtTokenModel.fromJson(jsonDecode(res.body));
-    } else {
-      RefreshErrorModel err = RefreshErrorModel.fromJson(jsonDecode(res.body));
-      throw Exception("code:${err.code}\ndetail:${err.detail}");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +38,7 @@ class SplashScreen extends StatelessWidget {
                     }else{
                       debugPrint('Refreshing token...');
 
-                      refreshToken(rToken).then((value){
+                      AuthApi.refreshToken(rToken).then((value){
                         debugPrint("New Access Token: ${value.access}");
                         debugPrint("New Refresh Token: ${value.refresh}");
                         SecureStorageUtil.saveCurrentAccessToken(value.access);
@@ -92,7 +65,9 @@ class SplashScreen extends StatelessWidget {
               );
             }
           },
-        );
+        ).catchError((e){
+          debugPrint(e.toString());
+        });
       },
     );
 
