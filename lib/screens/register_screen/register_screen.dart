@@ -1,22 +1,15 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
-import 'package:jwt_decoder/jwt_decoder.dart';
 
-import '../../models/error_model.dart';
-import '../../models/user_created_model.dart';
 import '../../models/user_fields_model.dart';
 import '../../routing/args/login_screen_args.dart';
+import '../../services/auth_api.dart';
 import '../../utils/shared_prefs_util.dart';
 import '../../widgets/choice_divider.dart';
 import '../../widgets/custom_text_button.dart';
 import '../../widgets/user_data_text_field.dart';
 import '../../themes/theme_constants.dart';
 import '../../providers/user_data_provider.dart';
-// ignore: library_prefixes
-import '../../utils/constants.dart' as Constants;
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({
@@ -28,39 +21,9 @@ class RegisterScreen extends StatelessWidget {
   final int number;
   final int code;
 
-  Future<UserCreatedModel> registerUser(
-      Map<String, String> userData, int code, int number) async {
-    final res = await http.post(
-      Uri.parse("${Constants.localAuthBaseUrl}registerUser/"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(
-        <String, dynamic>{
-          "first_name": userData["firstName"],
-          "last_name": userData["lastName"],
-          "username": userData["username"],
-          "email": userData["email"],
-          "password": userData["password"],
-          "number": number,
-          "country_code": code,
-        },
-      ),
-    );
-
-    if (res.statusCode == 201) {
-      debugPrint("Success!");
-      debugPrint(res.body);
-      return UserCreatedModel.fromJson(jsonDecode(res.body));
-    } else {
-      ErrorRes err = ErrorRes.fromJson(jsonDecode(res.body));
-      throw Exception(err.error);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
     final SharedPreferencesManager prefs = SharedPreferencesManager();
 
     return Scaffold(
@@ -172,7 +135,7 @@ class RegisterScreen extends StatelessWidget {
                             debugPrint("$userData");
                             debugPrint("$code $number");
 
-                            registerUser(userData, code, number).then((value) {
+                            AuthApi.registerUser(userData, code, number).then((value) {
                               debugPrint(value.success);
 
                               prefs.saveCurrentUser(User(
