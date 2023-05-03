@@ -1,5 +1,6 @@
 const localAuthBaseUrl = "http://10.0.2.2:8000/api/auth/";
-const localMainBaseUrl = "http://10.0.2.2:8000/api/pothole-report/";
+const localReportPotholeUrl = "http://10.0.2.2:8000/api/pothole-report/";
+const localGetPotholeBaseUrl = "http://10.0.2.2:8000/api/get-potholes/";
 const placesAutocompleteBaseUrl =
     "https://maps.googleapis.com/maps/api/place/autocomplete/json";
 const placesDetailsBaseUrl =

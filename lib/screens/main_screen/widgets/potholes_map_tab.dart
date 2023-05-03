@@ -62,7 +62,7 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
   }
 
   Future<List<dynamic>> _fetchPotholeInfo() async {
-    final res = await http.get(Uri.parse(Constants.localMainBaseUrl));
+    final res = await http.get(Uri.parse(Constants.localGetPotholeBaseUrl));
 
     if (res.statusCode == 200) {
       debugPrint('Successfully fetched pothole info');

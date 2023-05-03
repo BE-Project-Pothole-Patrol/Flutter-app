@@ -9,6 +9,7 @@ import 'package:http_parser/http_parser.dart';
 
 import '../../../routing/args/camera_screen_args.dart';
 import '../../../themes/theme_constants.dart';
+import '../../../utils/notification_util.dart';
 import '../../../utils/secure_storage_util.dart';
 import '../../../widgets/custom_text_button.dart';
 import '../../../utils/constants.dart' as Constants;
@@ -59,7 +60,7 @@ class _ReportPotholesTabState extends State<ReportPotholesTab> {
     String token = await SecureStorageUtil.getCurrentAccessToken();
 
     final req =
-        http.MultipartRequest('POST', Uri.parse(Constants.localMainBaseUrl))
+        http.MultipartRequest('POST', Uri.parse(Constants.localReportPotholeUrl))
           ..headers['Authorization'] = 'Bearer $token'
           ..fields['title'] = title
           ..fields['desc'] = descripton
@@ -258,9 +259,9 @@ class _ReportPotholesTabState extends State<ReportPotholesTab> {
                 size: size,
                 hidePrefImage: true,
                 isEnabled: _isReportBtnEnabled,
-                onTap: () {
+                onTap: () async {
                   debugPrint('Reporting... $_title $_desc');
-
+                  
                   widget.isPending(true);
 
                   LocationUtil.getUserLocation().then((value) {
