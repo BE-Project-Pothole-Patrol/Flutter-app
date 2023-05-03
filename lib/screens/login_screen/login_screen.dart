@@ -1,20 +1,14 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
-import '../../models/login_fail_model.dart';
-import '../../models/jwt_token_model.dart';
 import '../../providers/login_provider.dart';
 import '../../routing/args/get_otp_screen_args.dart';
+import '../../services/auth_api.dart';
 import '../../themes/theme_constants.dart';
 import '../../widgets/choice_divider.dart';
 import '../../widgets/custom_text_button.dart';
 import '../../widgets/user_data_text_field.dart';
 import '../../widgets/partial_colored_text.dart';
-import '../../utils/shared_prefs_util.dart';
-import '../../utils/constants.dart' as Constants;
 import '../../utils/secure_storage_util.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -29,34 +23,9 @@ class LoginScreen extends StatelessWidget {
   final String username;
   final String password;
 
-  Future<JwtTokenModel> loginUser(String username, String password) async {
-    final res = await http.post(
-      Uri.parse("${Constants.localAuthBaseUrl}token/"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(
-        <String, dynamic>{
-          "username": username,
-          "password": password,
-        },
-      ),
-    );
-
-    if (res.statusCode == 200) {
-      debugPrint("Successfully logged in!");
-      debugPrint(res.body);
-      return JwtTokenModel.fromJson(jsonDecode(res.body));
-    } else {
-      LoginErrorModel err = LoginErrorModel.fromJson(jsonDecode(res.body));
-      throw Exception(err.detail);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    final SharedPreferencesManager prefs = SharedPreferencesManager();
+    final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
       body: SafeArea(
@@ -139,13 +108,12 @@ class LoginScreen extends StatelessWidget {
                         ? () {
                             Map<String, String> loginData =
                                 context.read<LoginProvider>().getLoginData();
-                            loginUser(loginData["username"] ?? '',
-                                    loginData["password"] ?? '')
-                                .then((value) {
-                              debugPrint("Access Token: ${value.access}");
-                              debugPrint("Refresh Token: ${value.refresh}");
-                              SecureStorageUtil.saveCurrentAccessToken(value.access);
-                              SecureStorageUtil.saveCurrentRefreshToken(value.refresh);
+                            AuthApi.loginUser(loginData["username"] ?? '',loginData["password"] ?? '')
+                              .then((token) {
+                              debugPrint("Access Token: ${token.access}");
+                              debugPrint("Refresh Token: ${token.refresh}");
+                              SecureStorageUtil.saveCurrentAccessToken(token.access);
+                              SecureStorageUtil.saveCurrentRefreshToken(token.refresh);
 
                               Navigator.of(context).pushReplacementNamed('/mainScreen',arguments: '',);
                             }).catchError((e) {
