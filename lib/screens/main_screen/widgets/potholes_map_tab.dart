@@ -251,7 +251,7 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
 
                           await _changeMapLocation(
                               source.latitude, source.longitude,
-                              zoom: 14);
+                              zoom: 30);
 
                           setState(() {
                             _isUserNavigating = true;
@@ -298,15 +298,16 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
                             for(final pothole in nearbyPotholesList){
                               NotificationUtil.showNotification(
                                 id:pothole['id'],
-                                title: 'Pothole Near You',
-                                body: 'Pothole'
+                                title: pothole['title'],
+                                body: pothole['desc']
                               );
                             }
 
                             directions = await GoogleMapsApi.getDirections("${location.latitude}%2C${location.longitude}",_destId, _mode,true);
 
-                            await _changeMapLocation(location.latitude!, location.longitude!,zoom: 14);
+                            await _changeMapLocation(location.latitude!, location.longitude!,zoom: 30);
                             setState(() {
+                              _markers.clear();
                               _markers[Constants.commuterMarker] = Marker(
                                 markerId:
                                     const MarkerId(Constants.commuterMarker),

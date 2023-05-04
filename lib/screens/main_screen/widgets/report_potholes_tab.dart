@@ -80,7 +80,7 @@ class _ReportPotholesTabState extends State<ReportPotholesTab> {
 
     // //code just for testing it out
     // final Map<String, dynamic> data = jsonDecode(body);
-    if (res.statusCode == 201) {
+    if (res.statusCode == 201 || res.statusCode==200) {
       debugPrint('Successfully recd. your report!');
       debugPrint(body);
     } else {
