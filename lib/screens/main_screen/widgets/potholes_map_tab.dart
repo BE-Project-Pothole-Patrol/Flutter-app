@@ -47,6 +47,10 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
   bool _isUserLocnSource = false;
   bool _isUserNavigating = false;
 
+  List<Marker> _markersList = [];
+
+  Marker _commuter = Marker(markerId: MarkerId(Constants.commuterMarker));
+
   @override
   void initState() {
     super.initState();
@@ -94,7 +98,7 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
     List<dynamic> potholeInfo = await _fetchPotholeInfo();
 
     setState(() {
-      _markers.clear();
+      _markersList.clear();
       for (final pothole in potholeInfo) {
         final marker = Marker(
           markerId: MarkerId(pothole['id'].toString()),
@@ -106,21 +110,23 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
           ),
         );
 
-        _markers[pothole['id'].toString()] = marker;
+        _markersList.add(marker);
       }
     });
   }
 
-  Future<List<dynamic>> _getPotholesWithinARadius(LocationData currentLoc, int radius) async {
-    String url="${Constants.localGetPotholeBaseUrl}?dist=$radius&point=${currentLoc.longitude},${currentLoc.latitude}";
+  Future<List<dynamic>> _getPotholesWithinARadius(
+      LocationData currentLoc, int radius) async {
+    String url =
+        "${Constants.localGetPotholeBaseUrl}?dist=$radius&point=${currentLoc.longitude},${currentLoc.latitude}";
     final res = await http.get(Uri.parse(url));
 
-    if(res.statusCode==200){
+    if (res.statusCode == 200) {
       debugPrint('Successfully fetched potholes near you');
       debugPrint(res.body);
       List<dynamic> potholeInfo = jsonDecode(res.body);
       return potholeInfo;
-    }else{
+    } else {
       debugPrint('There was some error in fetching potholes near you');
       throw Exception(res.body);
     }
@@ -141,7 +147,7 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
               mapType: MapType.normal,
               initialCameraPosition: _initialPosition,
               onMapCreated: _onMapCreated,
-              markers: _markers.values.toSet(),
+              markers: {..._markersList, _commuter,..._markers.values.toSet()},
               polylines: _polyline,
               padding: EdgeInsets.only(bottom: size.height * 0.45),
             ),
@@ -187,7 +193,7 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
                           LatLng dest =
                               await GoogleMapsApi.getCoordinatesFromId(_destId);
 
-                          _changeMapLocation(source.latitude, source.longitude);
+                          _changeMapLocation(source.latitude, source.longitude,zoom: 30);
 
                           Directions directions =
                               await GoogleMapsApi.getDirections(
@@ -290,34 +296,40 @@ class _PotholesMapTabState extends State<PotholesMapTab> {
                             _isExpanded = false;
                           });
 
-                          _streamSubscription = await LocationUtil.getUserLocationUpdates((location) async {
+                          _streamSubscription =
+                              await LocationUtil.getUserLocationUpdates(
+                                  (location) async {
                             debugPrint('Location changed!');
-                            debugPrint("lat: ${location.latitude} long: ${location.longitude}");
-                            List<dynamic> nearbyPotholesList = await _getPotholesWithinARadius(location, 30);
+                            debugPrint(
+                                "lat: ${location.latitude} long: ${location.longitude}");
+                            List<dynamic> nearbyPotholesList =
+                                await _getPotholesWithinARadius(location, 30);
 
-                            for(final pothole in nearbyPotholesList){
+                            for (final pothole in nearbyPotholesList) {
                               NotificationUtil.showNotification(
-                                id:pothole['id'],
-                                title: pothole['title'],
-                                body: pothole['desc']
-                              );
+                                  id: pothole['id'],
+                                  title: pothole['title'],
+                                  body: pothole['desc']);
                             }
 
-                            directions = await GoogleMapsApi.getDirections("${location.latitude}%2C${location.longitude}",_destId, _mode,true);
+                            directions = await GoogleMapsApi.getDirections(
+                                "${location.latitude}%2C${location.longitude}",
+                                _destId,
+                                _mode,
+                                true);
 
-                            await _changeMapLocation(location.latitude!, location.longitude!,zoom: 30);
+                            await _changeMapLocation(
+                                location.latitude!, location.longitude!,
+                                zoom: 30);
                             setState(() {
-                              _markers.clear();
-                              _markers[Constants.commuterMarker] = Marker(
-                                markerId:
-                                    const MarkerId(Constants.commuterMarker),
-                                position: LatLng(
-                                    location.latitude!, location.latitude!),
+                              _commuter = Marker(
+                                markerId: const MarkerId(Constants.commuterMarker),
+                                position: LatLng(location.latitude!,location.longitude!),
                                 infoWindow: const InfoWindow(
                                   title: "You",
                                 ),
                                 icon: BitmapDescriptor.defaultMarkerWithHue(
-                                    BitmapDescriptor.hueBlue),
+                                  BitmapDescriptor.hueBlue)
                               );
 
                               _polyline.clear();
